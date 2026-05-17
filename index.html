@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   };
 
-  let shakaPlayer = null, currentServers = [], currentIndex = 0;
+  let shakaPlayer = null, currentServers = [], currentIndex = 0, currentMatchData = null;
   let controlsTimer = null, suppressVideoError = false, currentSpeed = 1;
 
   function toastMsg(msg){
@@ -341,6 +341,7 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   function openMatchPage(m){
+    currentMatchData = m;
     currentServers = normalizeServers(m);
     currentIndex = 0;
         
@@ -422,16 +423,22 @@ document.addEventListener("DOMContentLoaded", function(){
     setTimeout(() => suppressVideoError = false, 1000);
     els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
 
-    // 1. الفحص إذا كان هاتفاً لتمرير رابط البث المباشر فوراً إلى المشغل الخارجي
+    // 1. فحص تشغيل البث عبر تطبيق Beryan Player الخارجي للهواتف المحمولة
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (isMobile) {
       els.loading.style.display = "none";
       toastMsg("جاري تشغيل القنوات في Beryan Player...");
 
       const rawUrl = src.url || "";
-      // تشفير الرابط لحل مشكلة الرموز الخاصة والشاشة السوداء
       const encodedUrl = encodeURIComponent(rawUrl);
-      const androidIntent = `intent://beryan_player_exo${encodedUrl}#Intent;scheme=xmtv;package=com.beryan.player;end`;
+      
+      // استخراج وتشفير اسم المباراة لعرضها كعنوان داخل المشغل
+      const titleText = currentMatchData ? `${getHomeName(currentMatchData)} × ${getAwayName(currentMatchData)} (${src.label})` : "بث مباشر تيفي";
+      const encodedTitle = encodeURIComponent(titleText);
+      const encodedUA = encodeURIComponent(src.ua || "DefaultUserAgent");
+
+      // تمرير الرابط والـ Extra Strings بنجاح لمنع الشاشات السوداء تماماً
+      const androidIntent = `intent:${encodedUrl}#Intent;action=android.intent.action.VIEW;type=video/*;S.title=${encodedTitle};S.http-user-agent=${encodedUA};package=com.beryan.player;end`;
       
       window.location.href = androidIntent;
       return;
