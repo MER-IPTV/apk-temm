@@ -428,8 +428,10 @@ document.addEventListener("DOMContentLoaded", function(){
       els.loading.style.display = "none";
       toastMsg("جاري تشغيل القنوات في Beryan Player...");
 
-      const streamUrl = src.url || "";
-      const androidIntent = `intent://beryan_player_exo${streamUrl}#Intent;scheme=xmtv;package=com.beryan.player;end`;
+      const rawUrl = src.url || "";
+      // تشفير الرابط لحل مشكلة الرموز الخاصة والشاشة السوداء
+      const encodedUrl = encodeURIComponent(rawUrl);
+      const androidIntent = `intent://beryan_player_exo${encodedUrl}#Intent;scheme=xmtv;package=com.beryan.player;end`;
       
       window.location.href = androidIntent;
       return;
