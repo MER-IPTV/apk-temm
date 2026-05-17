@@ -226,7 +226,6 @@
 document.addEventListener("DOMContentLoaded", function(){
   feather.replace();
 
-  // كافة بيانات الـ Firebase الخاصة بك بقيت بدون تعديل
   const firebaseConfig = {
     apiKey: "AIzaSyAGhmOqXWxmr2ULOzNMMDuLlxCeTmUNpis",
     databaseURL: "https://frsin-araq-default-rtdb.firebaseio.com",
@@ -433,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function(){
     els.video.pause(); els.video.removeAttribute("src"); els.video.load();
   }
 
-  // الدالة المعدلة بالكامل لفتح تطبيق com.beryan.player تلقائياً للهواتف
+  // الدالة الفعالة بالكامل لفتح تطبيق com.beryan.player تلقائياً للهواتف
   async function playServer(i, useWorker = false){
     const src = currentServers[i]; if(!src) return;
     currentIndex = i; buildServerButtons(); suppressVideoError = true; await destroyPlayer();
@@ -448,13 +447,13 @@ document.addEventListener("DOMContentLoaded", function(){
       finalUrl = WORKER_BASE + "?" + p.toString();
     }
 
-    // الفحص إذا كان هاتفاً لإرسال البث لتطبيق Beryan Player
+    // الفحص إذا كان هاتفاً لإرسال البث لتطبيق Beryan Player تلقائياً
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (isMobile) {
       els.loading.style.display = "none";
       toastMsg("جاري تشغيل القناة في Beryan Player...");
 
-      // إرسال البث عبر حزمة الأندرويد com.beryan.player وتمرير اسم المباراة كعنوان
+      // إرسال البث عبر حزمة الأندرويد com.beryan.player وتمرير اسم المباراة كعنوان للتميز
       const androidIntent = `intent:${finalUrl}#Intent;package=com.beryan.player;type=video/*;scheme=http;S.title=${encodeURIComponent(els.headerTitle.textContent)};end`;
       window.location.href = androidIntent;
 
