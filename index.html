@@ -422,7 +422,7 @@ document.addEventListener("DOMContentLoaded", function(){
     setTimeout(() => suppressVideoError = false, 1000);
     els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
 
-    // 1. الفحص إذا كان هاتفاً لتمرير المصفوفة بالصيغة المباشرة للمشغل الخارجي
+    // 1. الفحص إذا كان هاتفاً لتمرير المصفوفة بصيغة الـ Intent المكتوبة بالكامل للمشغل الخارجي
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (isMobile) {
       els.loading.style.display = "none";
