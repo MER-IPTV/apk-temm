@@ -1,536 +1,615 @@
 <!DOCTYPE html>
-<html dir='rtl' lang='ar' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html dir="rtl" lang="ar">
 <head>
-<meta charset='utf-8'/>
-<meta content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1' name='viewport'/>
-<title>ALBASRI TV</title>
-<link href='https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap' rel='stylesheet'/>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' rel='stylesheet'/>
-<!-- ========================================================== -->
-<!-- 🛠&#65039; 1. هندسة لوحة التنسيق (Layout) - لوحة تحكم بلوجر -->
-<!-- ========================================================== -->
-<style id='template-skin-1' type='text/css'><!--
-body#layout { background-color: #f1f5f9 !important; font-family: 'Cairo', sans-serif !important; direction: rtl !important; padding: 20px !important;}
-body#layout .b-section { background: #ffffff !important; border: 3px solid #10b981 !important; border-radius: 12px !important; padding: 20px 15px 10px !important; margin-bottom: 25px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;}
-body#layout .b-section::before { display: block; font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #0f172a; border-bottom: 2px dashed #cbd5e1; padding-bottom: 10px;}
-/* زر التعديل الاحترافي في التنسيق */
-body#layout .b-widget .quickedit, body#layout .b-widget .edit-link { background-color: #10b981 !important; color: #ffffff !important; padding: 8px 15px !important; border-radius: 6px !important; text-decoration: none !important; font-weight: bold !important; font-family: 'Cairo', sans-serif !important; display: inline-block !important; margin-top: 10px !important;}
-body#layout .b-widget .quickedit:hover, body#layout .b-widget .edit-link:hover { background-color: #059669 !important; }
-body#layout .b-widget .quickedit img { display: none !important; }
-body#layout .b-widget .quickedit::after, body#layout .b-widget .edit-link::after { content: " &#9999;&#65039; تعديل الإعلان/الأداة" !important; }
-body#layout #Ad-Clicks::before { content: "🖱&#65039; أداة إعلان نقر"; border-color:#f43f5e; color: #e11d48;}
-body#layout #Ad-Top::before { content: "💰 أداة إعلان أعلى"; color: #047857;}
-body#layout #Ad-Footer::before { content: "💰 أداة إعلان أسفل"; color: #047857;}
-body#layout #Ad-Right::before { content: "💰 أداة إعلان يمين"; color: #047857;}
-body#layout #Ad-Left::before { content: "💰 أداة إعلان يسار"; color: #047857;}
-body#layout #Matches-Yesterday::before { content: "&#9917; أداة مباريات الأمس";}
-body#layout #Matches-Today::before { content: "&#9917; أداة مباريات اليوم";}
-body#layout #Matches-Tomorrow::before { content: "&#9917; أداة مباريات الغد";}
-body#layout #Header-Section::before { content: "👑 الشعار واسم الموقع";}
-body#layout #Menu-Section::before { content: "📋 القائمة العلوية الرئيسية";}
-body#layout #Social-Section::before { content: "🌐 روابط التواصل الاجتماعي";}
-body#layout #Fishes-Section::before { content: "🐟 قسم الزوار";}
-body#layout #Ad-Below-Matches::before { content: "💰 إعلان أسفل المباريات";}
-body#layout #Ad-Post-Top::before { content: "📄 إعلان أعلى المقالة";}
-body#layout #Ad-Post-Middle::before { content: "📄 إعلان وسط المقالة";}
-body#layout #Main-Posts::before { content: "📰 قسم المشاركات والأخبار الأساسي";}
-body#layout #Ad-Post-Bottom::before { content: "📄 إعلان أسفل المقالة";}
-body#layout #Footer-Menu::before { content: "&#9878;&#65039; قائمة الفوتر السفلية";}
---></style>
-<!-- ========================================================== -->
-<!-- 🎨 2. تصميم CSS للموقع (الواجهة الأمامية) -->
-<!-- ========================================================== -->
-<style id='page-skin-1' type='text/css'><!--
-:root {
---primary-color: #10b981;
---live-color: #ef4444;
---bg-color: #0b1121;
---card-bg: #151f32;
---card-gradient: linear-gradient(145deg, #151f32, #0d1425);
---text-main: #f8fafc;
---text-muted: #94a3b8;
---border-color: #1e293b;
---header-bg: rgba(11, 17, 33, 0.95);
---footer-bg: #070b15;
---shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-body.light-mode {
---bg-color: #f1f5f9; --card-bg: #ffffff; --card-gradient: linear-gradient(145deg, #ffffff, #f8fafc);
---text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
---header-bg: rgba(255, 255, 255, 0.98); --footer-bg: #e2e8f0; --shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-body { background-color: var(--bg-color); color: var(--text-main); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
-a { text-decoration: none; color: inherit; }
-.global-wrapper { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1350px; margin: 0 auto; padding: 30px 20px; gap: 30px; width: 100%; flex: 1;}
-/* 🔴 الإعلانات الجانبية ثابتة في مكانها (Static) لمنع التداخل 🔴 */
-.side-ads-container { width: 160px; flex-shrink: 0; position: relative; }
-.main-content { flex: 1; min-width: 0; width: 100%; }
-/* الهيدر */
-header { background: var(--header-bg); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: relative; z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-.header-wrap { display: flex; justify-content: space-between; align-items: center; max-width: 1350px; margin: 0 auto; padding: 0 20px; gap: 20px;}
-.header-logo a { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-.header-logo a img { max-height: 50px; width: auto; object-fit: contain; }
-.header-logo h1 { font-size: 26px; font-weight: 900; color: var(--text-main); margin: 0; }
-.desktop-nav { flex: 1; display: flex; justify-content: center;}
-.nav-links { display: flex; gap: 20px; justify-content: center; list-style: none; margin: 0; padding: 0; }
-.nav-links a { font-weight: 800; font-size: 16px; transition: 0.3s; color: var(--text-main); padding: 8px 12px; border-radius: 8px;}
-.nav-links a:hover { background: rgba(255,255,255,0.05); color: var(--primary-color); }
-.social-icons-wrap { display: flex; gap: 10px; list-style:none; }
-.social-icons-wrap a { display:flex; justify-content:center; align-items:center; width: 35px; height: 35px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border-color); transition: 0.3s; color: var(--text-muted); font-size: 16px;}
-.social-icons-wrap a:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-3px);}
-.header-actions { display: flex; align-items: center; gap: 10px; }
-.dark-toggle, .menu-toggle { background: var(--card-bg); border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 18px; color: var(--text-main); cursor: pointer; transition: 0.3s;}
-.dark-toggle:hover, .menu-toggle:hover { color: var(--primary-color); border-color: var(--primary-color); }
-.menu-toggle { display: none; }
-.menu-overlay { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1001; display: none; opacity: 0; transition: 0.3s; }
-.menu-overlay.active { display: block; opacity: 1; }
-.mobile-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--card-bg); z-index: 1002; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; box-shadow: var(--shadow); overflow-y: auto;}
-.mobile-menu.active { right: 0; }
-.mobile-menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
-.close-menu { background: none; border: none; font-size: 24px; color: var(--text-main); cursor: pointer; }
-.mobile-nav-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.mobile-nav-links a { font-weight: bold; font-size: 16px; color: var(--text-main); display: block; padding: 12px 15px; background: var(--bg-color); border-radius: 8px; border: 1px solid var(--border-color);}
-/* إعدادات مساحة الإعلانات (مخفية إذا كانت فارغة لتكون احترافية) */
-.ad-container { width: 100%; max-width: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; text-align:center; position: relative;}
-.ad-container:not(:empty) { margin: 20px auto; }
-.ad-container img, .ad-container iframe, .ad-container ins { max-width: 100%; border-radius: 8px; position:relative; z-index:2; display:block;}
-.widget-content:empty { display: none !important; margin: 0 !important; padding: 0 !important; }
-.fishes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-.fish-card { background: var(--card-bg); border: 1px dashed var(--primary-color); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.fish-card h3 { color: var(--text-main); margin-bottom: 10px; font-weight: 900;}
-/* المباريات */
-.match-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
-.match-tabs button { background: var(--card-bg); padding: 10px 35px; border-radius: 30px; font-weight: 800; border: 1px solid var(--border-color); color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.match-tabs button.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
-.matches-day { display: none; }
-.matches-day.active { display: block; animation: fadeUp 0.5s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-a.match-card { background: var(--card-gradient); border-radius: 16px; padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-right: 4px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden;}
-a.match-card:hover { transform: translateY(-5px); border-right-color: var(--primary-color); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
-.team { display: flex; flex-direction: column; align-items: center; width: 30%; position: relative; z-index: 2;}
-.team img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); transition: transform 0.3s ease;}
-a.match-card:hover .team img { transform: scale(1.1); }
-.team span { font-size: 17px; font-weight: 900; text-align: center; color: var(--text-main); }
-.match-center { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40%; gap: 15px; z-index: 2;}
-.match-score-time { background: rgba(0,0,0,0.3); color: var(--text-main); padding: 12px 30px; border-radius: 12px; font-size: 26px; font-weight: 900; direction: ltr; border: 1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); letter-spacing: 2px;}
-.match-status { font-size: 13px; font-weight: 900; padding: 6px 20px; border-radius: 30px; color:#fff; text-align: center; white-space: nowrap; min-width: 90px; text-transform: uppercase; letter-spacing: 0.5px;}
-.status-live { background: var(--live-color); box-shadow: 0 0 15px rgba(239,68,68,0.5); animation: liveBlink 1.5s infinite; }
-.status-soon { background: var(--primary-color); }
-.status-end { background: #475569; }
-@keyframes liveBlink { 0% { box-shadow: 0 0 10px rgba(239,68,68,0.4); } 50% { box-shadow: 0 0 25px rgba(239,68,68,0.8); } 100% { box-shadow: 0 0 10px rgba(239,68,68,0.4); } }
-/* المقالات */
-.news-title { font-size: 22px; font-weight: 900; color: var(--text-main); border-right: 4px solid var(--primary-color); padding-right: 15px; margin: 50px 0 25px; display:flex; align-items:center; gap:10px;}
-.post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-.post-card { background: var(--card-bg); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 1px solid var(--border-color); transition: all 0.4s ease; display: flex; flex-direction: column; }
-.post-card:hover { transform: translateY(-10px); border-color: var(--primary-color); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-.post-card img { width: 100%; height: 190px; object-fit: cover; border-bottom: 1px solid var(--border-color); transition: transform 0.5s ease;}
-.post-card:hover img { transform: scale(1.05); }
-.post-card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; background: var(--card-bg); position: relative; z-index: 2;}
-.post-card-title { font-size: 16px; font-weight: 800; line-height: 1.6; color: var(--text-main); margin-bottom: 15px;}
-.read-more-btn { font-size: 13px; font-weight: 800; color: var(--primary-color); align-self: flex-start; display: flex; align-items: center; gap: 5px; text-transform: uppercase;}
-.single-post-wrap { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: var(--shadow); border: 1px solid var(--border-color); line-height: 1.9; font-size: 18px;}
-.single-post-wrap h1 { font-weight: 900; margin-bottom: 30px; color: var(--primary-color); text-align: center; font-size: 28px;}
-.single-post-wrap img { max-width: 100%; border-radius: 12px; margin: 25px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
-.post-body-content { margin-top: 20px; color: var(--text-main);}
-.single-post-wrap iframe, .single-post-wrap video, .single-post-wrap embed { width: 100%; max-width: 100%; aspect-ratio: 16/9; background-color: #000; border-radius: 16px; padding: 0; border: 2px solid #334155; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); transition: all 0.4s ease; margin: 30px auto; display: block; overflow: hidden;}
-footer { background: var(--footer-bg); border-top: 1px solid var(--border-color); padding: 15px 20px; margin-top: auto; }
-.footer-inner { max-width: 1350px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px;}
-.footer-menu-list ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 0; margin: 0;}
-.footer-menu-list a { color: var(--text-muted); font-weight: 700; font-size: 14px; transition: color 0.3s ease; }
-.footer-menu-list a:hover { color: var(--primary-color); }
-.copyright { color: var(--text-muted); font-size: 13px; font-weight: bold; margin-top: 5px; text-align: center; opacity: 0.6;}
-@media (max-width: 1024px) {
-.post-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 992px) {
-.side-ads-container { display: none; }
-.desktop-nav, .social-icons-wrap { display: none; }
-.menu-toggle { display: flex; }
-}
-@media (max-width: 768px) {
-.global-wrapper { padding: 15px 10px; }
-.match-tabs { gap: 8px;}
-.match-tabs button { flex: 1 1 30%; padding: 10px 5px; font-size: 14px; border-radius: 8px;}
-a.match-card { padding: 20px 15px; border-radius: 12px;}
-.team img { width: 50px; height: 50px; margin-bottom: 8px;}
-.team span { font-size: 14px; }
-.match-score-time { font-size: 20px; padding: 8px 15px; border-radius: 8px;}
-.match-status { font-size: 12px; padding: 4px 15px; min-width: 70px;}
-.post-grid { display: flex; flex-direction: column; gap: 15px; }
-.post-card { flex-direction: row; height: 120px; align-items: center; border-radius: 12px;}
-.post-card img { width: 35%; height: 100%; border-radius: 0 12px 12px 0; border-bottom: none; border-left: 1px solid var(--border-color);}
-.post-card-body { width: 65%; padding: 15px; justify-content: center;}
-.post-card-title { font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0;}
-.read-more-btn { display: none; }
-.single-post-wrap { padding: 20px; font-size: 16px;}
-.single-post-wrap h1 { font-size: 22px; margin-bottom: 20px;}
-.single-post-wrap iframe { border-radius: 10px; margin: 20px auto; border-width: 1px;}
-.fishes-grid { grid-template-columns: 1fr; }
-}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WD9CGH9TV0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WD9CGH9TV0');
+  </script>
+    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>البصري تيفي للبث المباشر</title>
+  <meta name="description" content="مشاهدة مباريات اليوم بث مباشر بدون تقطيع، بث مباشر القنوات الرياضية HD.">
+  <meta name="theme-color" content="#0f172a">
 
---></style>
-<meta name='google-adsense-platform-account' content='ca-host-pub-1556223355139109'/>
-<meta name='google-adsense-platform-domain' content='blogspot.com'/>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.13/shaka-player.compiled.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
+  <style>
+    :root {
+      --bg: #0b1120; 
+      --card-bg: #1e293b; 
+      --card-border: rgba(255, 255, 255, 0.08);
+      --header-bg: #0f172a;
+      --text-main: #ffffff; 
+      --text-muted: #94a3b8; 
+      --accent: #3b82f6; 
+      --live: #ef4444; 
+      --soon: #10b981; 
+      --end: #64748b;
+    }
+        
+    body.light {
+      --bg: #f8fafc; 
+      --card-bg: #ffffff; 
+      --card-border: rgba(0, 0, 0, 0.08);
+      --header-bg: #ffffff;
+      --text-main: #0f172a; 
+      --text-muted: #64748b; 
+      --accent: #2563eb;
+    }
+
+    * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
+    html, body { margin: 0; padding: 0; width: 100%; min-height: 100%; font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text-main); overflow-x: hidden; }
+
+    /* Header */
+    header { background: var(--header-bg); height: 65px; display: flex; align-items: center; justify-content: space-between; position: fixed; width: 100%; top: 0; z-index: 50; padding: 0 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-bottom: 1px solid var(--card-border); transition: 0.3s; }
+    header h3 { margin: 0; font-size: 18px; font-weight: 900; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; direction: ltr; }
+    .header-btn { width: 42px; height: 42px; border-radius: 12px; background: var(--card-bg); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--card-border); transition: 0.2s; }
+    .header-btn:active { transform: scale(0.9); }
+
+    /* App Views */
+    .view { display: none; margin-top: 80px; padding: 0 16px 24px; max-width: 800px; margin-left: auto; margin-right: auto; flex-direction: column; gap: 20px; animation: fadeIn 0.4s ease forwards; }
+    .view.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    #matchesList { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .empty { padding: 40px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; text-align: center; color: var(--text-muted); font-size: 18px; font-weight: 700; }
+
+    /* Match Card Design */
+    .match-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: all 0.3s ease; position: relative; }
+    .match-card.clickable:hover { transform: translateY(-3px); border-color: var(--accent); cursor: pointer; }
+        
+    .match-teams { display: flex; align-items: center; justify-content: space-between; padding: 20px 15px; gap: 10px; }
+    .team { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+    .team img { width: 65px; height: 65px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+    .team-name { font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.3; word-break: break-word; }
+        
+    .match-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 100px; }
+    .center-value { font-size: 30px; font-weight: 900; color: var(--text-main); letter-spacing: 2px; direction: ltr; text-shadow: 0 2px 10px rgba(0,0,0,0.1); white-space: nowrap; }
+    .center-time { font-size: 20px; font-weight: 900; color: var(--text-main); direction: ltr; background: var(--card-border); padding: 4px 14px; border-radius: 10px; letter-spacing: 1px; white-space: nowrap; }
+        
+    .status-badge { padding: 6px 16px; border-radius: 999px; font-size: 12px; font-weight: 900; color: #fff; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); white-space: nowrap; }
+    .status-badge.live { background: linear-gradient(45deg, var(--live), #f87171); animation: pulseLive 1.5s infinite; }
+    .status-badge.soon { background: linear-gradient(45deg, var(--soon), #34d399); }
+    .status-badge.end { background: linear-gradient(45deg, var(--end), #94a3b8); }
+    @keyframes pulseLive { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+    /* Player Container */
+    .player-section { background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); padding: 15px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    .player-frame-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+    #playerRoot { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    video { width: 100%; height: 100%; object-fit: contain; }
+        
+    /* Servers List */
+    .servers-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+    .servers-container::-webkit-scrollbar { display: none; }
+    .server-btn { border: 1px solid var(--card-border); background: var(--bg); color: var(--text-main); padding: 10px 20px; border-radius: 12px; font-family: 'Tajawal'; font-weight: 800; font-size: 14px; white-space: nowrap; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+    .server-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+
+    /* Player UI Controls */
+    .player-bottom{ position:absolute; left:0; right:0; bottom:0; z-index:99; padding:15px; background:linear-gradient(to top, rgba(0,0,0,.9), transparent); transition: 0.3s; }
+    .progress{ height:5px; background:rgba(255,255,255,.3); border-radius:999px; position:relative; overflow:hidden; margin-bottom:10px; cursor:pointer; }
+    .progress-played{ position:absolute; top:0; bottom:0; left:0; width:0; background:var(--accent); transition: width 0.1s linear;}
+    .bottom-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; direction:ltr; }
+    .time-label{ color:#fff; font-size:13px; font-weight:700; letter-spacing: 1px;}
+    .icon-row{ display:flex; gap:6px; flex-wrap:wrap; justify-content: flex-end;}
+        
+    .pbtn{ width:38px; height:38px; border:none; border-radius:10px; background:rgba(255,255,255,.15); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(10px); }
+    .pbtn i { width: 18px; height: 18px; pointer-events: none; }
+        
+    .center-control{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:99; display:flex; align-items:center; gap:20px; transition: 0.3s; }
+    .round-btn{ border:none; border-radius:50%; background:rgba(0,0,0,.5); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
+    .round-btn.big{ width:65px; height:65px; } .round-btn.small{ width:45px; height:45px; }
+    .round-btn i{ width:28px; height:28px; pointer-events: none;} .round-btn.small i{ width:20px; height:20px; }
+
+    .player-controls-hidden .player-bottom { transform: translateY(100%); opacity: 0; }
+    .player-controls-hidden .center-control { opacity: 0; transform: translate(-50%, -50%) scale(0.9); pointer-events: none; }
+
+    #loading, #buffer{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; display:none; z-index:100; animation:spin 1s linear infinite; }
+    #loading{ width:50px; height:50px; border:4px solid rgba(255,255,255,.2); border-top-color:var(--accent); }
+    #buffer{ width:60px; height:60px; border:4px solid rgba(255,255,255,.2); border-top-color:var(--accent); }
+    @keyframes spin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+
+    #errorOverlay{ position:absolute; inset:0; background:rgba(0,0,0,.9); color:#fff; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; z-index:101; }
+    .retry{ border:none; padding:10px 24px; border-radius:12px; background:var(--accent); color:#fff; font-weight:900; cursor:pointer; margin-top: 15px; font-family:'Tajawal'; }
+        
+    .toast{ position:fixed; z-index:10001; right:50%; bottom:30px; transform:translateX(50%); background:rgba(0,0,0,.85); color:#fff; padding:12px 24px; border-radius:999px; display:none; font-weight:800; font-size: 14px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
+    .toast.show{ display:block; animation: popUp 0.3s ease forwards; }
+    @keyframes popUp { from { opacity: 0; transform: translate(50%, 20px); } to { opacity: 1; transform: translate(50%, 0); } }
+
+    /* Menus */
+    .control-menu{ position:absolute; left:10px; bottom:65px; z-index:102; min-width:180px; max-height:220px; overflow-y:auto; background:rgba(15,23,42,.95); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:8px; display:none; backdrop-filter:blur(10px); direction: rtl;}
+    .control-menu.show{ display:block; }
+    .menu-item{ width:100%; border:none; background:transparent; color:#fff; padding:10px; border-radius:10px; font-family:'Tajawal'; font-weight:800; text-align:right; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;}
+    .menu-item:hover, .menu-item.active{ background:rgba(255,255,255,.1); color: var(--accent); }
+    .speed-text{ color:#fff; font-size:12px; font-weight:900; pointer-events:none;}
+
+    /* Responsiveness */
+    @media (max-width: 600px) {
+      .match-teams { padding: 15px 10px; }
+      .team { gap: 6px; }
+      .team img { width: 50px; height: 50px; }
+      .team-name { font-size: 13px; }
+      .center-value { font-size: 24px; }
+      .center-time { font-size: 16px; padding: 4px 10px; }
+      .status-badge { padding: 4px 12px; font-size: 11px; }
+    }
+    @media (max-width: 380px) {
+      .team img { width: 40px; height: 40px; }
+      .team-name { font-size: 11px; }
+      .center-value { font-size: 20px; }
+      .center-time { font-size: 14px; padding: 4px 8px; }
+      .status-badge { padding: 3px 10px; font-size: 10px; }
+      .match-teams { padding: 12px 5px; gap: 5px; }
+    }
+  </style>
 </head>
-<body class='dark-mode'>
-<!-- ================== إعلان نقر ================== -->
-<div class='section' id='Ad-Clicks'><div class='widget HTML' data-version='2' id='HTML999'>
-<div style='display:none;'>
-</div>
-</div></div>
-<div class='layout-container'>
+<body>
+
 <header>
-<div class='header-wrap'>
-<div class='header-logo'>
-<div class='section' id='Header-Section'><div class='widget Header' data-version='2' id='Header1'>
-<a href='/////////' title='الرئيسية'>
-<h1><i class='fas fa-futbol' style='color:var(--primary-color); font-size:24px;'></i>
-ALBASRI TV</h1>
-</a>
-</div></div>
-</div>
-<div class='desktop-nav'>
-<div class='no-items section' id='Menu-Section'>
-</div>
-</div>
-<div class='header-actions'>
-<div class='no-items section' id='Social-Section'>
-</div>
-<button class='dark-toggle' id='darkModeBtn' onclick='toggleDarkMode()'><i class='fas fa-sun'></i></button>
-<button class='menu-toggle' onclick='toggleMobileMenu()'><i class='fas fa-bars'></i></button>
-</div>
-</div>
+  <button class="header-btn" id="backBtn" style="visibility: hidden;"><i data-feather="arrow-right"></i></button>
+  <h3 id="headerTitle">المباريات المباشرة</h3>
+  <button class="header-btn" id="themeBtn"><i data-feather="moon"></i></button>
 </header>
-<div class='menu-overlay' onclick='toggleMobileMenu()'></div>
-<div class='mobile-menu' id='mobileMenu'>
-<div class='mobile-menu-header'>
-<h3 style='color:var(--primary-color); font-weight:900;'>القائمة الرئيسية</h3>
-<button class='close-menu' onclick='toggleMobileMenu()'><i class='fas fa-times'></i></button>
+
+<!-- View 1: Matches List -->
+<div id="homeView" class="view active">
+  <div id="matchesList">
+    <div class="empty">جاري تحميل المباريات...</div>
+  </div>
 </div>
-<div id='mobile-nav-container'></div>
+
+<!-- View 2: Match Details & Player -->
+<div id="matchView" class="view">
+  <div id="matchHeaderCardContainer"></div>
+
+  <div class="player-section">
+    <div class="player-frame-wrapper" id="playerWrapper">
+      <div id="playerRoot">
+        <video id="video" playsinline autoplay></video>
+                
+        <div id="loading"></div>
+        <div id="buffer"></div>
+
+        <div id="errorOverlay">
+          <i data-feather="alert-triangle" style="width: 45px; height: 45px; margin-bottom: 10px; color: var(--live);"></i>
+          <h4 id="errorTitle" style="margin: 0 0 5px;">عذراً</h4>
+          <p id="errorMsg" style="color: #cbd5e1; font-size: 13px; margin:0;">تعذر تشغيل الفيديو.</p>
+          <button class="retry" id="retryBtn">إعادة المحاولة</button>
+        </div>
+
+        <div class="center-control">
+          <button class="round-btn small" id="rewindBtn"><i data-feather="rotate-ccw"></i></button>
+          <button class="round-btn big" id="playPauseBtn"><i data-feather="pause"></i></button>
+          <button class="round-btn small" id="forwardBtn"><i data-feather="rotate-cw"></i></button>
+        </div>
+
+        <div class="player-bottom">
+          <div class="progress" id="progress">
+            <div class="progress-played" id="progressPlayed"></div>
+          </div>
+          <div class="bottom-row">
+            <div class="time-label" id="playerTime">LIVE</div>
+            <div class="icon-row">
+              <button class="pbtn" id="muteBtn"><i data-feather="volume-2"></i></button>
+              <button class="pbtn" id="speedBtn"><span class="speed-text">1x</span></button>
+              <button class="pbtn" id="qualityBtn"><i data-feather="settings"></i></button>
+              <button class="pbtn" id="audioBtn"><i data-feather="mic"></i></button>
+              <button class="pbtn" id="fullscreenBtn"><i data-feather="maximize"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menus inside player -->
+        <div class="control-menu" id="qualityMenu"></div>
+        <div class="control-menu" id="audioMenu"></div>
+        <div class="control-menu" id="speedMenu"></div>
+      </div>
+    </div>
+
+    <!-- Servers Links -->
+    <div class="servers-container" id="serverStrip"></div>
+  </div>
 </div>
-<!-- ================== إعلان أعلى ================== -->
-<div class='ad-container top-ad'>
-<div class='section' id='Ad-Top'><div class='widget HTML' data-version='2' id='HTML101'><div class='widget-content'>
-</div></div></div>
-</div>
-<div class='global-wrapper'>
-<!-- ================== إعلان يمين ================== -->
-<aside class='side-ads-container right-ads'>
-<div class='section' id='Ad-Right'><div class='widget HTML' data-version='2' id='HTML102'><div class='widget-content'>
-</div></div></div>
-</aside>
-<main class='main-content'>
-<div class='fishes-grid'>
-<div class='section' id='Fishes-Section'><div class='widget HTML' data-version='2' id='HTML301'><div class='widget-content'>
-</div></div><div class='widget HTML' data-version='2' id='HTML302'><div class='widget-content'>
-</div></div></div>
-</div>
-<!-- المباريات -->
-<div class='match-tabs'><button class='active' id='btn-today' onclick='showTab(&#39;today&#39;)'>مباريات اليوم</button>
-</div>
-<div class='matches-day' id='tab-yesterday'>
-<div class='section' id='Matches-Yesterday'><div class='widget HTML' data-version='2' id='HTML91'><div class='match-data-raw' style='display:none;'>
-</div><div class='match-content-checker'></div></div></div>
-</div>
-<div class='matches-day active' id='tab-today'>
-<div class='section' id='Matches-Today'><div class='widget HTML' data-version='2' id='HTML92'><div class='match-data-raw' style='display:none;'>[{"id":"جنوىميلان","date":"2026-05-17","home":"جنوى","away":"ميلان","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1891690283004.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3181690283002.png","time":"1:00 م","score":"1 - 0","status":"جارية","watchLink":"#"},{"id":"بيزانابولي","date":"2026-05-17","home":"بيزا","away":"نابولي","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F8651691681667.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9521720636634.png","time":"1:00 م","score":"2 - 0","status":"جارية","watchLink":"#"},{"id":"يوفنتوسفيورنتينا","date":"2026-05-17","home":"يوفنتوس","away":"فيورنتينا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9331690283003.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1231690283002.png","time":"1:00 م","score":"1 - 0","status":"جارية","watchLink":"#"},{"id":"رومالاتسيو","date":"2026-05-17","home":"روما","away":"لاتسيو","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F17722024059541.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F5111690283002.png","time":"1:00 م","score":"0 - 1","status":"جارية","watchLink":"#"},{"id":"أتلتيكبلباوسيلتافيغو","date":"2026-05-17","home":"أتلتيك بلباو","away":"سيلتا فيغو","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1061690197944.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9611690196747.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"أتلتيكومدريدجيرونا","date":"2026-05-17","home":"أتلتيكو مدريد","away":"جيرونا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1431719588699.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3151690196742.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"إلتشيخيتافي","date":"2026-05-17","home":"إلتشي","away":"خيتافي","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F6441698766179.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3451691957863.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ليفانتيريالمايوركا","date":"2026-05-17","home":"ليفانتي","away":"ريال مايوركا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F2601690370530.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F5291690196746.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"رايوفاليكانوفياريال","date":"2026-05-17","home":"رايو فاليكانو","away":"فياريال","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1511690196745.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F7121690196747.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ريالسوسيدادفالنسيا","date":"2026-05-17","home":"ريال سوسيداد","away":"فالنسيا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9441690196745.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F7881690196747.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ريالأوفييدوألافيس","date":"2026-05-17","home":"ريال أوفييدو","away":"ألافيس","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1891698830716.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F2381690196746.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"برشلونةريالبيتيس","date":"2026-05-17","home":"برشلونة","away":"ريال بيتيس","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9541690196746.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F17645945054618.png","time":"10:15 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"إشبيليةريالمدريد","date":"2026-05-17","home":"إشبيلية","away":"ريال مدريد","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F6931690196743.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1871690196746.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"أوساسوناإسبانيول","date":"2026-05-17","home":"أوساسونا","away":"إسبانيول","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F7961690196745.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4481690370529.png","time":"8:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ليونلانس","date":"2026-05-17","home":"ليون","away":"لانس","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4081690287528.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F1281690287063.png","time":"10:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ناديباريسباريس","date":"2026-05-17","home":"نادي باريس","away":"باريس","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F6551690370501.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4461690287785.png","time":"10:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"أتلانتابولونيا","date":"2026-05-17","home":"أتلانتا","away":"بولونيا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3541690283001.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4281690283003.png","time":"7:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"إنترميلانهيلاسفيرونا","date":"2026-05-17","home":"إنتر ميلان","away":"هيلاس فيرونا","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3101690283003.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3871690283003.png","time":"4:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"مانيونايتدنوتينغهام","date":"2026-05-17","home":"مان يونايتد","away":"نوتينغهام","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4871690119302.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F7741690119007.png","time":"2:30 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"برينتفوردكريستالبالاس","date":"2026-05-17","home":"برينتفورد","away":"كريستال بالاس","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4791690118957.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F6121690118883.png","time":"5:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"إيفرتونسندرلاند","date":"2026-05-17","home":"إيفرتون","away":"سندرلاند","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F8461690118694.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F10001690823905.png","time":"5:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"ليدزيونايتدبرايتون","date":"2026-05-17","home":"ليدز يونايتد","away":"برايتون","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4691690458244.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F2271696710594.png","time":"5:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"وولفرهامبتونفولهام","date":"2026-05-17","home":"وولفرهامبتون","away":"فولهام","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F9631690118479.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4711690118927.png","time":"5:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"نيوكاسلوستهام","date":"2026-05-17","home":"نيوكاسل","away":"وست هام","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F3721690119405.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F7191690118603.png","time":"7:30 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"},{"id":"الشبابالاتحاد","date":"2026-05-17","home":"الشباب","away":"الاتحاد","homeLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F4261690298871.png","awayLogo":"https://wsrv.nl/?url=https%3A%2F%2Fimgs.ysscores.com%2Fteams%2F64%2F2231690298782.png","time":"9:00 م","score":"0 - 0","status":"لم تبدأ","watchLink":"#"}]</div><div class='match-content-checker'></div></div></div>
-</div>
-<div class='matches-day' id='tab-tomorrow'>
-<div class='section' id='Matches-Tomorrow'><div class='widget HTML' data-version='2' id='HTML93'><div class='match-data-raw' style='display:none;'>
-</div><div class='match-content-checker'></div></div></div>
-</div>
-<div class='ad-container'>
-<div class='section' id='Ad-Below-Matches'><div class='widget HTML' data-version='2' id='HTML104'><div class='widget-content'>
-</div></div></div>
-</div>
-<h2 class='news-title'><i class='fas fa-newspaper'></i> أحدث الأخبار والمقالات</h2>
-<div class='section' id='Main-Posts'><div class='widget Blog' data-version='2' id='Blog1'>
-<div class='post-grid'>
-<a class='post-card' href='000000000000000000000000000'>
-<img loading='lazy' src='0000000000000000000000000000000'/>
-<div class='post-card-body'>
-<h3 class='post-card-title'>موعد وتوقيت والقنوات الناقلة لمباراة العراق والنرويج ضمن مباراة الجولة الاولى من كأس العالم 2026</h3>
-<span class='read-more-btn'>التفاصيل <i class='fas fa-chevron-left' style='font-size:10px;'></i></span>
-</div>
-</a>
-<a class='post-card' href='00000000000000000000'>
-<img loading='lazy' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjWiDZeSwhAtu4l5LjjvExAPWd2JX-83lpp1W_v8MozfJE-00qEmbWHRk1DHZsXVMVpEAWjLJWDpii16SNMxjjd65S0j6l3WY5qpB8Cd-IwiK_gQYsrX64ubV1oUGeH8rwcjepuN4hM3l5Q3BgVP79elLY-uQ_oAv33XHYXXmH0dOsjHyRLm-RjKZSSMw/s1600/Gemini_Generated_Image_m3kzgem3kzgem3kz.png'/>
-<div class='post-card-body'>
-<h3 class='post-card-title'>مواعيد وتوقيت والقنوات الناقلة ومشاركات منتخب الأردن التاريخية في كأس العالم 2026</h3>
-<span class='read-more-btn'>التفاصيل <i class='fas fa-chevron-left' style='font-size:10px;'></i></span>
-</div>
-</a>
-</div>
-</div></div>
-</main>
-<!-- ================== إعلان يسار ================== -->
-<aside class='side-ads-container left-ads'>
-<div class='section' id='Ad-Left'><div class='widget HTML' data-version='2' id='HTML103'><div class='widget-content'>
-</div></div></div>
-</aside>
-</div>
-<footer>
-<div class='footer-inner'>
-<!-- ================== إعلان أسفل ================== -->
-<div class='ad-container' style='margin:0;'>
-<div class='section' id='Ad-Footer'><div class='widget HTML' data-version='2' id='HTML105'><div class='widget-content'>
-</div></div></div>
-</div>
-<div class='footer-menu-list'>
-<div class='section' id='Footer-Menu'><div class='widget LinkList' data-version='2' id='LinkList2'><ul><li><a href='https://www.bsrtv.pro/p/privacy-policy.html'>سياسة الخصوصية</a></li><li><a href='https://www.bsrtv.pro/p/terms-of-service.html'>اتفاقية الاستخدام</a></li><li><a href='https://www.bsrtv.pro/p/about-us.html'>من نحن</a></li><li><a href='https://www.bsrtv.pro/p/contact-us.html'>اتصل بنا</a></li></ul></div></div>
-</div>
-<div class='copyright'>
-                    جميع الحقوق محفوظة لصالح موقع Beryan  TV &#169; <span id='currentYear'></span>
-</div>
-</div>
-</footer>
-</div>
-<script type='text/javascript'>
-    //<![CDATA[
-        function toggleDarkMode() {
-            document.body.classList.toggle('light-mode');
-            const icon = document.querySelector('#darkModeBtn i');
-            icon.className = document.body.classList.contains('light-mode') ? 'fas fa-moon' : 'fas fa-sun';
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  feather.replace();
+
+  // كافة بيانات الـ Firebase الخاصة بك بقيت بدون تعديل
+  const firebaseConfig = {
+    apiKey: "AIzaSyAGhmOqXWxmr2ULOzNMMDuLlxCeTmUNpis",
+    databaseURL: "https://frsin-araq-default-rtdb.firebaseio.com",
+    projectId: "frsin-araq",
+    storageBucket: "frsin-araq.firebasestorage.app",
+    messagingSenderId: "813355696991",
+    appId: "1:813355696991:android:4a58ec98591210bf77acea"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const WORKER_BASE = "https://api1bas.yaqoopp2731.workers.dev/";
+
+  // UI Elements
+  const els = {
+    homeView: document.getElementById('homeView'),
+    matchView: document.getElementById('matchView'),
+    matchesList: document.getElementById('matchesList'),
+    matchCardContainer: document.getElementById('matchHeaderCardContainer'),
+    headerTitle: document.getElementById('headerTitle'),
+    backBtn: document.getElementById('backBtn'),
+    themeBtn: document.getElementById('themeBtn'),
+    video: document.getElementById('video'),
+    playerRoot: document.getElementById('playerRoot'),
+    playerWrapper: document.getElementById('playerWrapper'),
+    serverStrip: document.getElementById('serverStrip'),
+    loading: document.getElementById('loading'),
+    buffer: document.getElementById('buffer'),
+    errorOverlay: document.getElementById('errorOverlay'),
+    errorTitle: document.getElementById('errorTitle'),
+    errorMsg: document.getElementById('errorMsg'),
+    progress: document.getElementById('progress'),
+    progressPlayed: document.getElementById('progressPlayed'),
+    playerTime: document.getElementById('playerTime'),
+    toast: document.getElementById('toast'),
+    menus: {
+      quality: document.getElementById('qualityMenu'),
+      audio: document.getElementById('audioMenu'),
+      speed: document.getElementById('speedMenu')
+    }
+  };
+
+  let shakaPlayer = null, currentServers = [], currentIndex = 0;
+  let controlsTimer = null, suppressVideoError = false, currentSpeed = 1;
+
+  function toastMsg(msg){
+    els.toast.textContent = msg; els.toast.classList.add("show");
+    setTimeout(() => els.toast.classList.remove("show"), 2500);
+  }
+
+  const getHomeName = m => m.home || m.home_name || m.homeName || "الفريق المستضيف";
+  const getAwayName = m => m.away || m.away_name || m.awayName || "الفريق الضيف";
+  const getHomeLogo = m => m.homeLogo || m.home_logo || 'https://via.placeholder.com/100?text=H';
+  const getAwayLogo = m => m.awayLogo || m.away_logo || 'https://via.placeholder.com/100?text=A';
+
+  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶٧٨٩".indexOf(d)); }    
+  function format12Hour(time){
+    if(!time) return "غير محدد";
+    const m = toEng(time).trim().match(/(\d{1,2}):(\d{2})/);
+    if(!m) return time;
+    let h = parseInt(m[1], 10), min = m[2];
+    return (h % 12 || 12) + ":" + min + " " + (h >= 12 ? "م" : "ص");
+  }
+
+  function getStatus(m){
+    const s = Number(m.status ?? m.match_status ?? 0);
+    const txt = String(m.statusText || m.status_text || "");
+    const matchStart = (m.date && m.time) ? new Date(m.date + "T" + toEng(m.time)) : null;
+
+    if(txt.includes("انتهت") || s === 4 || (matchStart && Date.now() >= matchStart.getTime() + (130*60*1000))) return {text:"انتهت", cls:"end", icon:"x-circle", isLive: false};
+    if(txt.includes("جارية") || txt.includes("مباشر") || [1,2,3].includes(s) || (matchStart && Date.now() >= matchStart.getTime())) return {text:"مباشر 🔴", cls:"live", icon:"radio", isLive: true};
+    return {text:"لم تبدأ", cls:"soon", icon:"clock", isLive: false};
+  }
+
+  function getScore(m){
+    const h = String(m.homeScore ?? m.home_scores ?? "").trim(), a = String(m.awayScore ?? m.away_scores ?? "").trim();
+    return (h==="" || h==="-") ? "0 - 0" : `${h} - ${a}`;
+  }
+
+  function normalizeServers(m){
+    let s = Array.isArray(m.servers)?m.servers:Array.isArray(m.qualities)?m.qualities:(typeof m.servers==="object"&&m.servers!==null)?Object.values(m.servers):[];
+    return s.filter(x => x && x.url).map(x => ({ label: x.label||x.name||"سيرفر", url: x.url||"", ua: x.userAgent||"", ref: x.referer||"", key: x.drmKey||x.clearKey||"" }));
+  }
+
+  function buildCardHTML(m, isClickable = true){
+    const status = getStatus(m);
+    const timeOrScore = status.isLive || status.cls === 'end' ? `<div class="center-value">${getScore(m)}</div>` : `<div class="center-time">${format12Hour(m.time || m.match_time)}</div>`;
+
+    return `
+      <div class="match-card ${isClickable ? 'clickable' : ''}">
+        <div class="match-teams">
+          <div class="team home">
+            <img src="${getHomeLogo(m)}" loading="lazy">
+            <span class="team-name">${getHomeName(m)}</span>
+          </div>
+          <div class="match-center">
+            ${timeOrScore}
+            <div class="status-badge ${status.cls}">
+              <i data-feather="${status.icon}" style="width:14px; height:14px;"></i> ${status.text}
+            </div>
+          </div>
+          <div class="team away">
+            <img src="${getAwayLogo(m)}" loading="lazy">
+            <span class="team-name">${getAwayName(m)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Fetch from Realtime Database
+  db.ref("matches").on("value", snap => {
+    const data = snap.val() || {};
+    const list = Object.values(data).filter(m => m && (m.published === true || String(m.published) === "true"));
+    els.matchesList.innerHTML = "";
+    if(!list.length) return els.matchesList.innerHTML = '<div class="empty">لا توجد مباريات حالياً</div>';
+        
+    list.sort((a, b) => {
+      const statusOrder = { "live": 1, "soon": 2, "end": 3 };
+      return (statusOrder[getStatus(a).cls] || 4) - (statusOrder[getStatus(b).cls] || 4);
+    }).forEach(m => {
+      const div = document.createElement("div");
+      div.innerHTML = buildCardHTML(m, true);
+      div.onclick = () => openMatchPage(m);
+      els.matchesList.appendChild(div);
+    });
+    feather.replace();
+  });
+
+  function openMatchPage(m){
+    currentServers = normalizeServers(m);
+    currentIndex = 0;
+        
+    els.headerTitle.textContent = `${getHomeName(m)} VS ${getAwayName(m)}`;
+    els.headerTitle.style.direction = "rtl";
+    els.matchCardContainer.innerHTML = buildCardHTML(m, false);
+        
+    els.homeView.classList.remove('active');
+    els.matchView.classList.add('active');
+    els.backBtn.style.visibility = "visible";
+    feather.replace();
+
+    buildServerButtons();
+    if(currentServers.length > 0) playServer(0);
+    else showError("لا يوجد بث", "لم يتم إضافة روابط بث لهذه المباراة بعد.");
+  }
+
+  function goHome(){
+    destroyPlayer();
+    els.matchView.classList.remove('active');
+    els.homeView.classList.add('active');
+    els.headerTitle.textContent = "المباريات المباشرة";
+    els.backBtn.style.visibility = "hidden";
+  }
+  els.backBtn.onclick = goHome;
+
+  // Theme Toggle
+  function toggleTheme(){
+    const isL = document.body.classList.toggle("light");
+    localStorage.setItem("bsr_theme", isL ? "light" : "dark");
+    els.themeBtn.innerHTML = `<i data-feather="${isL ? 'sun' : 'moon'}"></i>`; feather.replace();
+  }
+  if(localStorage.getItem("bsr_theme") === "light") toggleTheme();
+  els.themeBtn.onclick = toggleTheme;
+
+  // Controls Visibility
+  function showPlayerControls(){
+    els.playerRoot.classList.remove("player-controls-hidden");
+    clearTimeout(controlsTimer);
+    controlsTimer = setTimeout(() => {
+      if(!Object.values(els.menus).some(m => m.classList.contains("show"))) els.playerRoot.classList.add("player-controls-hidden");
+    }, 3500);
+  }
+
+  els.playerRoot.addEventListener("click", e => {
+    if(!e.target.closest(".pbtn, .control-menu")) closeMenus();
+    if(e.target.closest("button, #progress, .control-menu")) { showPlayerControls(); return; }
+    els.playerRoot.classList.contains("player-controls-hidden") ? showPlayerControls() : (clearTimeout(controlsTimer), els.playerRoot.classList.add("player-controls-hidden"), closeMenus());
+  });
+
+  function closeMenus(){ Object.values(els.menus).forEach(m => m.classList.remove("show")); }
+  function toggleMenu(menu){ const isOpen = menu.classList.contains("show"); closeMenus(); if(!isOpen) menu.classList.add("show"); showPlayerControls(); }
+
+  function buildServerButtons(){
+    els.serverStrip.innerHTML = "";
+    if(!currentServers.length) return els.serverStrip.innerHTML = '<span style="color:var(--text-muted); margin: auto;">لا توجد سيرفرات</span>';
+    currentServers.forEach((s, i) => {
+      const b = document.createElement("button");
+      b.className = "server-btn" + (i === currentIndex ? " active" : "");
+      b.innerHTML = `<i data-feather="monitor" style="width:16px;height:16px;"></i> ${s.label}`;
+      b.onclick = () => playServer(i, false);
+      els.serverStrip.appendChild(b);
+    });
+    feather.replace();
+  }
+
+  function showError(title, msg){
+    els.loading.style.display = "none"; els.buffer.style.display = "none";
+    els.errorTitle.textContent = title; els.errorMsg.textContent = msg;
+    els.errorOverlay.style.display = "flex";
+  }
+
+  async function destroyPlayer(){
+    if(shakaPlayer){ try { await shakaPlayer.destroy(); shakaPlayer = null; } catch(e){} }
+    els.video.pause(); els.video.removeAttribute("src"); els.video.load();
+  }
+
+  // الدالة المعدلة بالكامل لفتح تطبيق com.beryan.player تلقائياً للهواتف
+  async function playServer(i, useWorker = false){
+    const src = currentServers[i]; if(!src) return;
+    currentIndex = i; buildServerButtons(); suppressVideoError = true; await destroyPlayer();
+    setTimeout(() => suppressVideoError = false, 1000);
+    els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
+
+    let finalUrl = src.url;
+    if(useWorker || src.ua || src.ref) {
+      const p = new URLSearchParams({ url: src.url, _: Date.now() });
+      if(src.ua) p.set("ua", src.ua); if(src.ref) p.set("ref", src.ref);
+      if(src.url.includes(".m3u8")) p.set("type", "hls");
+      finalUrl = WORKER_BASE + "?" + p.toString();
+    }
+
+    // الفحص إذا كان هاتفاً لإرسال البث لتطبيق Beryan Player
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      els.loading.style.display = "none";
+      toastMsg("جاري تشغيل القناة في Beryan Player...");
+
+      // إرسال البث عبر حزمة الأندرويد com.beryan.player وتمرير اسم المباراة كعنوان
+      const androidIntent = `intent:${finalUrl}#Intent;package=com.beryan.player;type=video/*;scheme=http;S.title=${encodeURIComponent(els.headerTitle.textContent)};end`;
+      window.location.href = androidIntent;
+
+      // حل احتياطي: إذا لم يكن التطبيق ثابتاً، يشتغل المشغل الداخلي للمتصفح تلقائياً بعد 3 ثوانٍ
+      setTimeout(async () => {
+        if (!shakaPlayer) {
+          try {
+            els.loading.style.display = "block";
+            shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
+            shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
+            if(src.key) { const ck = src.key.split(":"); if(ck.length===2) shakaPlayer.configure({ drm: { clearKeys: { [ck[0]]: ck[1] } } }); }
+            await shakaPlayer.load(finalUrl); await els.video.play().catch(()=>{});
+            els.loading.style.display = "none";
+            updatePlayIcon(); showPlayerControls(); buildMenus();
+          } catch(e) {}
         }
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+      }, 3000);
+      return;
+    }
 
-        function toggleMobileMenu() {
-            document.querySelector('.mobile-menu').classList.toggle('active');
-            document.querySelector('.menu-overlay').classList.toggle('active');
-            const navLinks = document.querySelector('.desktop-nav .nav-links');
-            const mobileNavContainer = document.getElementById('mobile-nav-container');
-            if(navLinks && mobileNavContainer.innerHTML === '') {
-                const cloneNav = navLinks.cloneNode(true);
-                cloneNav.className = 'mobile-nav-links';
-                mobileNavContainer.appendChild(cloneNav);
-            }
-        }
+    // التشغيل داخل المتصفح تلقائياً في حالة تصفح الكمبيوتر (Desktop PC)
+    try{
+      shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
+      shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
+      if(src.key) { const ck = src.key.split(":"); if(ck.length===2) shakaPlayer.configure({ drm: { clearKeys: { [ck[0]]: ck[1] } } }); }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            let postBody = document.getElementById('the-post-body');
-            let middleAd = document.getElementById('middle-ad-source');
-            if(postBody && middleAd && middleAd.innerHTML.trim() !== '') {
-                let elements = postBody.querySelectorAll('p, div, br');
-                if(elements.length > 2) {
-                    let targetElement = elements[Math.floor(elements.length / 2)] || elements[2];
-                    let adContainer = document.createElement('div');
-                    adContainer.className = 'ad-container';
-                    adContainer.innerHTML = middleAd.innerHTML;
-                    targetElement.parentNode.insertBefore(adContainer, targetElement.nextSibling);
-                }
-                middleAd.remove();
-            }
-        });
-
-        const allMatchesData = { 'yesterday': [], 'today': [], 'tomorrow': [] };
-
-        function formatTime12Hour(timeStr) {
-            if(!timeStr) return "";
-            if (timeStr.includes('ص') || timeStr.includes('م')) return timeStr;
-            let [h, m] = timeStr.replace(/[AMPM\s]/gi, '').trim().split(':');
-            h = parseInt(h, 10);
-            let ampm = h >= 12 ? 'م' : 'ص';
-            h = h % 12 || 12;
-            return `${h}:${m} ${ampm}`;
-        }
-
-        function getApiStatusStr(code) {
-            let c = parseInt(code, 10);
-            if (c === 4) return 'انتهت';
-            if ([6, 7, 8, 9].includes(c)) return 'مؤجلة';
-            if ([1, 2, 3, 5, 11, 12, 13, 14, 21, 22].includes(c)) return 'جارية';
-            return 'لم تبدأ'; 
-        }
-
-        function applySmartTimePrediction(m) {
-            if (!m.date || !m.time) return;
-            let parts = m.date.split('-'); 
-            if(parts.length !== 3) return;
-            let matchDate = new Date(parts[0], parts[1] - 1, parts[2]);
-            let timeClean = m.time.replace(/[صمAMPM\s]/gi, '').trim();
-            let [h, min] = timeClean.split(':');
-            if(!h || !min) return;
-            h = parseInt(h, 10);
-            min = parseInt(min, 10);
-            let isPM = m.time.includes('م') || m.time.toLowerCase().includes('pm');
-            let isAM = m.time.includes('ص') || m.time.toLowerCase().includes('am');
-            if (isPM && h < 12) h += 12;
-            if (isAM && h === 12) h = 0;
-            matchDate.setHours(h, min, 0, 0);
-            let now = new Date();
-            let diffMins = (now - matchDate) / 60000;
+      shakaPlayer.addEventListener("error", async () => { if(!useWorker) playServer(currentIndex, true); });
+      await shakaPlayer.load(finalUrl); await els.video.play().catch(()=>{});
             
-            if (m.status === 'لم تبدأ' || m.status === 'جارية') {
-                if (diffMins >= 0 && diffMins < 120) {
-                    m.status = 'جارية';
-                    if (!m.score || m.score === '') m.score = '0 - 0';
-                } else if (diffMins >= 120) {
-                    m.status = 'انتهت';
-                } else {
-                    m.status = 'لم تبدأ';
-                }
-            }
+      els.loading.style.display = "none"; els.video.playbackRate = currentSpeed;
+      updatePlayIcon(); showPlayerControls(); buildMenus();
+    } catch(e) {
+      els.loading.style.display = "none";
+      if(!useWorker) playServer(currentIndex, true); else showError("فشل البث", "تعذر تشغيل هذا السيرفر.");
+    }
+  }
+
+  // بناء القوائم برمجياً وعزل الأحداث بالكامل
+  function buildMenus(){
+    // 1. جودة البث
+    els.menus.quality.innerHTML = "";
+    const autoBtn = document.createElement("button");
+    autoBtn.className = "menu-item active";
+    autoBtn.textContent = "تلقائي";
+    autoBtn.onclick = () => { shakaPlayer.configure({abr:{enabled:true}}); toastMsg('تلقائي'); closeMenus(); };
+    els.menus.quality.appendChild(autoBtn);
+
+    if(shakaPlayer) {
+      shakaPlayer.getVariantTracks().filter(t=>t.height).sort((a,b)=>b.height-a.height).forEach(t => {
+        if(!els.menus.quality.innerHTML.includes(t.height+'p')) {
+          const btn = document.createElement("button");
+          btn.className = "menu-item";
+          btn.textContent = `${t.height}p`;
+          btn.onclick = () => {
+            shakaPlayer.configure({abr:{enabled:false}});
+            shakaPlayer.selectVariantTrack(t, true);
+            toastMsg(`${t.height}p`);
+            closeMenus();
+          };
+          els.menus.quality.appendChild(btn);
         }
+      });
+    }
 
-        function buildMatchCardHTML(m) {
-            let statusClass = 'status-soon';
-            if(m.status === 'جارية') statusClass = 'status-live';
-            if(m.status === 'انتهت' || m.status === 'مؤجلة') statusClass = 'status-end';
+    // 2. مسارات الصوت
+    els.menus.audio.innerHTML = "";
+    if(shakaPlayer) {
+      const tracks = [...new Set(shakaPlayer.getVariantTracks().map(t=>t.language||"und"))];
+      tracks.forEach(l => {
+        const btn = document.createElement("button");
+        btn.className = "menu-item";
+        btn.textContent = `صوت: ${l.toUpperCase()}`;
+        btn.onclick = () => { shakaPlayer.configure({preferredAudioLanguage: l}); toastMsg(`صوت: ${l.toUpperCase()}`); closeMenus(); };
+        els.menus.audio.appendChild(btn);
+      });
+    }
+    if(!els.menus.audio.children.length) {
+      els.menus.audio.innerHTML = `<button class="menu-item active">الافتراضي</button>`;
+    }
 
-            let centerData = (m.status === 'لم تبدأ' || m.status === 'مؤجلة') ? `<i class="far fa-clock"></i> ${formatTime12Hour(m.time)}` : (m.score || "0 - 0");
-            
-            return `
-                <a href="${m.watchLink}" class="match-card" data-match-id="${m.id}">
-                    <div class="team"><img src="${m.homeLogo}"><span>${m.home}</span></div>
-                    <div class="match-center">
-                        <div class="match-score-time" id="score-time-${m.id}">${centerData}</div>
-                        <div class="match-status ${statusClass}" id="status-${m.id}">${m.status}</div>
-                    </div>
-                    <div class="team"><img src="${m.awayLogo}"><span>${m.away}</span></div>
-                </a>
-            `;
-        }
+    // 3. سرعة التشغيل
+    els.menus.speed.innerHTML = "";
+    [0.5, 1, 1.5, 2].forEach(s => {
+      const btn = document.createElement("button");
+      btn.className = "menu-item" + (s === currentSpeed ? " active" : "");
+      btn.textContent = `${s}x`;
+      btn.onclick = () => {
+        currentSpeed = s;
+        els.video.playbackRate = s;
+        document.querySelector('.speed-text').innerText = `${s}x`;
+        toastMsg(`السرعة ${s}x`);
+        closeMenus();
+      };
+      els.menus.speed.appendChild(btn);
+    });
+  }
 
-        function renderMatchesForDay(day) {
-            const container = document.querySelector(`#tab-${day} .match-content-checker`);
-            if (!container) return;
-            if (allMatchesData[day].length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            const statusOrder = { 'جارية': 1, 'لم تبدأ': 2, 'مؤجلة': 3, 'انتهت': 4 };
-            allMatchesData[day].sort((a, b) => {
-                return (statusOrder[a.status] || 5) - (statusOrder[b.status] || 5);
-            });
+  els.video.addEventListener("timeupdate", () => {
+    const d = els.video.duration, c = els.video.currentTime||0;
+    if(d && isFinite(d)){ 
+      els.progressPlayed.style.width = ((c/d)*100)+"%"; 
+      els.playerTime.textContent = new Date(c*1000).toISOString().substr(14,5); 
+    } else { 
+      els.progressPlayed.style.width = "100%"; 
+      els.playerTime.textContent = "LIVE 🔴"; 
+    }
+  });
 
-            let html = '';
-            allMatchesData[day].forEach(m => { html += buildMatchCardHTML(m); });
-            container.innerHTML = html;
-        }
+  els.video.addEventListener("waiting", () => els.buffer.style.display = "block");
+  els.video.addEventListener("playing", () => els.buffer.style.display = "none");
+  
+  els.progress.onclick = e => { 
+    const d = els.video.duration; 
+    if(d && isFinite(d)) {
+      els.video.currentTime = ((e.clientX - els.progress.getBoundingClientRect().left)/els.progress.offsetWidth) * d; 
+    }
+  };
 
-        async function fetchLiveApiAndUpdateDOM(day) {
-            if(allMatchesData[day].length === 0) return;
-            let dateStr = "";
-            let firstMatch = allMatchesData[day][0];
-            if (firstMatch && firstMatch.date) { dateStr = firstMatch.date; } 
-            else {
-                let targetDate = new Date();
-                if (day === 'yesterday') targetDate.setDate(targetDate.getDate() - 1);
-                else if (day === 'tomorrow') targetDate.setDate(targetDate.getDate() + 1);
-                let tzoffset = targetDate.getTimezoneOffset() * 60000;
-                dateStr = new Date(targetDate.getTime() - tzoffset).toISOString().slice(0, 10);
-            }
-            const timestamp = new Date().getTime();
-            const apiUrl = `https://api-ar.ysscores.com/api/matches/matches_date_get/${dateStr}/%5B%5D/%5B%5D/%5B%5D/D/180`;
-            const proxies = [
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}&t=${timestamp}`,
-                `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(apiUrl)}&t=${timestamp}`,
-                `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`
-            ];
-            let liveData = null;
-            for (let proxy of proxies) {
-                try {
-                    let res = await fetch(proxy, { cache: "no-store" });
-                    if(res.ok) { let text = await res.text(); let json = JSON.parse(text); liveData = Array.isArray(json) ? json : (json.data || []); break; }
-                } catch(e) {}
-            }
+  const updatePlayIcon = () => { 
+    document.getElementById("playPauseBtn").innerHTML = `<i data-feather="${els.video.paused?'play':'pause'}"></i>`; 
+    feather.replace(); 
+  };
+  document.getElementById("playPauseBtn").onclick = () => { els.video.paused ? els.video.play() : els.video.pause(); updatePlayIcon(); };
+  els.video.addEventListener("play", updatePlayIcon); els.video.addEventListener("pause", updatePlayIcon);
 
-            if(liveData) {
-                let anyStatusChanged = false;
-                allMatchesData[day].forEach(localMatch => {
-                    let liveMatch = liveData.find(apiM => {
-                        let apiId = apiM.home_team.title.replace(/\s/g,'') + apiM.away_team.title.replace(/\s/g,'');
-                        return apiId === localMatch.id || apiM.id == localMatch.id;
-                    });
-                    if(liveMatch) {
-                        let realStatus = getApiStatusStr(liveMatch.status);
-                        let hScore = (liveMatch.home_scores !== null && liveMatch.home_scores !== "") ? liveMatch.home_scores : 0;
-                        let aScore = (liveMatch.away_scores !== null && liveMatch.away_scores !== "") ? liveMatch.away_scores : 0;
-                        let realScore = `${aScore} - ${hScore}`;
+  document.getElementById("rewindBtn").onclick = () => { if(isFinite(els.video.duration)) els.video.currentTime -= 10; };
+  document.getElementById("forwardBtn").onclick = () => { if(isFinite(els.video.duration)) els.video.currentTime += 10; };
+  
+  document.getElementById("muteBtn").onclick = () => { 
+    els.video.muted = !els.video.muted; 
+    document.getElementById("muteBtn").innerHTML = `<i data-feather="${els.video.muted?'volume-x':'volume-2'}"></i>`; 
+    feather.replace(); 
+  };
+    
+  document.getElementById("fullscreenBtn").onclick = async () => {
+    const p = els.playerWrapper;
+    if(document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      try {
+        if(p.requestFullscreen) await p.requestFullscreen();
+        else if(p.webkitRequestFullscreen) p.webkitRequestFullscreen();
+        
+        setTimeout(() => {
+          screen.orientation?.lock("landscape").catch(()=>{});
+        }, 200);
+      } catch(e) {}
+    }
+  };
 
-                        if (localMatch.status !== realStatus || localMatch.score !== realScore) {
-                            localMatch.status = realStatus; localMatch.score = realScore; anyStatusChanged = true;
-                        }
-                        localStorage.setItem('matCache_' + localMatch.id, JSON.stringify({status: realStatus, score: realScore}));
-                    }
-                });
-                if(anyStatusChanged) { renderMatchesForDay(day); }
-            }
-        }
-
-        function showTab(day) {
-            document.querySelectorAll('.matches-day').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.match-tabs button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('tab-' + day).classList.add('active');
-            document.getElementById('btn-' + day).classList.add('active');
-            renderMatchesForDay(day); fetchLiveApiAndUpdateDOM(day); 
-        }
-
-        document.addEventListener('DOMContentLoaded', async function() {
-            const tabs = ['yesterday', 'today', 'tomorrow'];
-            tabs.forEach(day => {
-                const tab = document.getElementById('tab-' + day);
-                if (!tab) return;
-                const rawDiv = tab.querySelector('.match-data-raw');
-                if (rawDiv) {
-                    try {
-                        const cleanJson = rawDiv.innerText.trim();
-                        if (cleanJson.startsWith('[')) {
-                            let parsed = JSON.parse(cleanJson);
-                            parsed.forEach(m => {
-                                let cachedStr = localStorage.getItem('matCache_' + m.id);
-                                if(cachedStr) {
-                                    let cData = JSON.parse(cachedStr);
-                                    m.status = cData.status; m.score = cData.score;
-                                } else {
-                                    applySmartTimePrediction(m); 
-                                }
-                            });
-                            allMatchesData[day] = parsed;
-                        }
-                    } catch (e) {}
-                }
-            });
-
-            let activeTab = document.querySelector('.matches-day.active');
-            if (activeTab) {
-                let currentDay = activeTab.id.replace('tab-', '');
-                renderMatchesForDay(currentDay); fetchLiveApiAndUpdateDOM(currentDay);
-            }
-
-            setInterval(() => {
-                let cDayObj = document.querySelector('.matches-day.active');
-                if(cDayObj) { let cDay = cDayObj.id.replace('tab-', ''); fetchLiveApiAndUpdateDOM(cDay); }
-            }, 30000); 
-        });
-    //]]>
-    </script>
-
-<script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/654365252-widgets.js"></script>
-<script type='text/javascript'>
-window['__wavt'] = 'AAVkm1u2_Jm4uuzhUVNImsN78RED:1779026442721';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d2794488163493075450','//www.bsrtv.pro/','2794488163493075450');
-_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '2794488163493075450', 'title': 'ALBASRI TV', 'url': 'https://www.bsrtv.pro/', 'canonicalUrl': 'http://www.bsrtv.pro/', 'homepageUrl': 'https://www.bsrtv.pro/', 'searchUrl': 'https://www.bsrtv.pro/search', 'canonicalHomepageUrl': 'http://www.bsrtv.pro/', 'blogspotFaviconUrl': 'https://www.bsrtv.pro/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': true, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'ar', 'localeUnderscoreDelimited': 'ar', 'languageDirection': 'rtl', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22ALBASRI TV - Atom\x22 href\x3d\x22https://www.bsrtv.pro/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22ALBASRI TV - RSS\x22 href\x3d\x22https://www.bsrtv.pro/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22ALBASRI TV - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/2794488163493075450/posts/default\x22 /\x3e\n', 'meTag': '\x3clink rel\x3d\x22me\x22 href\x3d\x22https://www.blogger.com/profile/07096353561527912430\x22 /\x3e\n', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'adsenseAutoAds': false, 'boqCommentIframeForm': true, 'loginRedirectParam': '', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/66f339c43d4ec606', 'plusOneApiSrc': 'https://apis.google.com/js/platform.js', 'disableGComments': true, 'interstitialAccepted': false, 'sharing': {'platforms': [{'name': '\u0627\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0627\u0644\u0631\u0627\u0628\u0637', 'key': 'link', 'shareMessage': '\u0627\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0627\u0644\u0631\u0627\u0628\u0637', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': '\u0645\u0634\u0627\u0631\u0643\u0629 \u0625\u0644\u0649 Facebook', 'target': 'facebook'}, {'name': '\u0643\u062a\u0627\u0628\u0629 \u0645\u062f\u0648\u0646\u0629 \u062d\u0648\u0644 \u0647\u0630\u0647 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629', 'key': 'blogThis', 'shareMessage': '\u0643\u062a\u0627\u0628\u0629 \u0645\u062f\u0648\u0646\u0629 \u062d\u0648\u0644 \u0647\u0630\u0647 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629', 'target': 'blog'}, {'name': 'X', 'key': 'twitter', 'shareMessage': '\u0645\u0634\u0627\u0631\u0643\u0629 \u0625\u0644\u0649 X', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': '\u0645\u0634\u0627\u0631\u0643\u0629 \u0625\u0644\u0649 Pinterest', 'target': 'pinterest'}, {'name': '\u0628\u0631\u064a\u062f \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a', 'key': 'email', 'shareMessage': '\u0628\u0631\u064a\u062f \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 0, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27ar\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': '\u0642\u0631\u0627\u0621\u0629 \u0627\u0644\u0645\u0632\u064a\u062f', 'pageType': 'index', 'pageName': '', 'pageTitle': 'ALBASRI TV'}}, {'name': 'features', 'data': {}}, {'name': 'messages', 'data': {'edit': '\u062a\u0639\u062f\u064a\u0644', 'linkCopiedToClipboard': '\u062a\u0645 \u0646\u0633\u062e \u0627\u0644\u0631\u0627\u0628\u0637 \u0625\u0644\u0649 \u0627\u0644\u062d\u0627\u0641\u0638\u0629', 'ok': '\u062d\u0633\u0646\u064b\u0627', 'postLink': '\u0631\u0627\u0628\u0637 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': '\u0645\u062e\u0635\u0635', 'isResponsive': true, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'ALBASRI TV', 'description': '', 'url': 'https://www.bsrtv.pro/', 'type': 'feed', 'isSingleItem': false, 'isMultipleItems': true, 'isError': false, 'isPage': false, 'isPost': false, 'isHomepage': true, 'isArchive': false, 'isLabelSearch': false}}, {'name': 'widgets', 'data': [{'title': '\u0623\u062f\u0627\u0629 \u0625\u0639\u0644\u0627\u0646 \u0646\u0642\u0631', 'type': 'HTML', 'sectionId': 'Ad-Clicks', 'id': 'HTML999'}, {'title': 'ALBASRI TV (\u0631\u0623\u0633 \u0627\u0644\u0635\u0641\u062d\u0629)', 'type': 'Header', 'sectionId': 'Header-Section', 'id': 'Header1'}, {'title': '\u0623\u062f\u0627\u0629 \u0625\u0639\u0644\u0627\u0646 \u0623\u0639\u0644\u0649', 'type': 'HTML', 'sectionId': 'Ad-Top', 'id': 'HTML101'}, {'title': '\u0623\u062f\u0627\u0629 \u0625\u0639\u0644\u0627\u0646 \u064a\u0645\u064a\u0646', 'type': 'HTML', 'sectionId': 'Ad-Right', 'id': 'HTML102'}, {'title': '\u0633\u0645\u0643\u0629 \u0627\u0644\u0642\u0635\u062f\u064a\u0631', 'type': 'HTML', 'sectionId': 'Fishes-Section', 'id': 'HTML301'}, {'title': '\u0633\u0645\u0643\u0629 \u0627\u0644\u062f\u062c\u0627\u062c\u0629', 'type': 'HTML', 'sectionId': 'Fishes-Section', 'id': 'HTML302'}, {'title': '\u0623\u062f\u0627\u0629 \u0645\u0628\u0627\u0631\u064a\u0627\u062a \u0627\u0644\u0623\u0645\u0633', 'type': 'HTML', 'sectionId': 'Matches-Yesterday', 'id': 'HTML91'}, {'title': '\u0623\u062f\u0627\u0629 \u0645\u0628\u0627\u0631\u064a\u0627\u062a \u0627\u0644\u064a\u0648\u0645', 'type': 'HTML', 'sectionId': 'Matches-Today', 'id': 'HTML92'}, {'title': '\u0623\u062f\u0627\u0629 \u0645\u0628\u0627\u0631\u064a\u0627\u062a \u0627\u0644\u063a\u062f', 'type': 'HTML', 'sectionId': 'Matches-Tomorrow', 'id': 'HTML93'}, {'title': '\u0625\u0639\u0644\u0627\u0646 \u0623\u0633\u0641\u0644 \u0627\u0644\u0645\u0628\u0627\u0631\u064a\u0627\u062a', 'type': 'HTML', 'sectionId': 'Ad-Below-Matches', 'id': 'HTML104'}, {'title': '\u0625\u0639\u0644\u0627\u0646 \u0623\u0639\u0644\u0649 \u0627\u0644\u0645\u0642\u0627\u0644\u0629', 'type': 'HTML', 'sectionId': 'Ad-Post-Top', 'id': 'HTML201'}, {'title': '\u0625\u0639\u0644\u0627\u0646 \u0648\u0633\u0637 \u0627\u0644\u0645\u0642\u0627\u0644\u0629', 'type': 'HTML', 'sectionId': 'Ad-Post-Middle', 'id': 'HTML202'}, {'title': '\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u0645\u062f\u0648\u0646\u0629 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629', 'type': 'Blog', 'sectionId': 'Main-Posts', 'id': 'Blog1', 'posts': [{'id': '691263124995761061', 'title': '\u0645\u0648\u0639\u062f \u0648\u062a\u0648\u0642\u064a\u062a \u0648\u0627\u0644\u0642\u0646\u0648\u0627\u062a \u0627\u0644\u0646\u0627\u0642\u0644\u0629 \u0644\u0645\u0628\u0627\u0631\u0627\u0629 \u0627\u0644\u0639\u0631\u0627\u0642 \u0648\u0627\u0644\u0646\u0631\u0648\u064a\u062c \u0636\u0645\u0646 \u0645\u0628\u0627\u0631\u0627\u0629 \u0627\u0644\u062c\u0648\u0644\u0629 \u0627\u0644\u0627\u0648\u0644\u0649 \u0645\u0646 \u0643\u0623\u0633 \u0627\u0644\u0639\u0627\u0644\u0645 2026', 'showInlineAds': false}, {'id': '53093195445626569', 'title': '\u0645\u0648\u0627\u0639\u064a\u062f \u0648\u062a\u0648\u0642\u064a\u062a \u0648\u0627\u0644\u0642\u0646\u0648\u0627\u062a \u0627\u0644\u0646\u0627\u0642\u0644\u0629 \u0648\u0645\u0634\u0627\u0631\u0643\u0627\u062a \u0645\u0646\u062a\u062e\u0628 \u0627\u0644\u0623\u0631\u062f\u0646 \u0627\u0644\u062a\u0627\u0631\u064a\u062e\u064a\u0629 \u0641\u064a \u0643\u0623\u0633 \u0627\u0644\u0639\u0627\u0644\u0645 2026', 'featuredImage': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjWiDZeSwhAtu4l5LjjvExAPWd2JX-83lpp1W_v8MozfJE-00qEmbWHRk1DHZsXVMVpEAWjLJWDpii16SNMxjjd65S0j6l3WY5qpB8Cd-IwiK_gQYsrX64ubV1oUGeH8rwcjepuN4hM3l5Q3BgVP79elLY-uQ_oAv33XHYXXmH0dOsjHyRLm-RjKZSSMw/s1600/Gemini_Generated_Image_m3kzgem3kzgem3kz.png', 'showInlineAds': false}], 'headerByline': {'regionName': 'header1', 'items': [{'name': 'timestamp', 'label': ''}]}, 'footerBylines': [{'regionName': 'footer1', 'items': [{'name': 'icons', 'label': ''}]}, {'regionName': 'footer2', 'items': [{'name': 'labels', 'label': ''}]}], 'allBylineItems': [{'name': 'timestamp', 'label': ''}, {'name': 'icons', 'label': ''}, {'name': 'labels', 'label': ''}]}, {'title': '\u0625\u0639\u0644\u0627\u0646 \u0623\u0633\u0641\u0644 \u0627\u0644\u0645\u0642\u0627\u0644\u0629', 'type': 'HTML', 'sectionId': 'Ad-Post-Bottom', 'id': 'HTML203'}, {'title': '\u0623\u062f\u0627\u0629 \u0625\u0639\u0644\u0627\u0646 \u064a\u0633\u0627\u0631', 'type': 'HTML', 'sectionId': 'Ad-Left', 'id': 'HTML103'}, {'title': '\u0623\u062f\u0627\u0629 \u0625\u0639\u0644\u0627\u0646 \u0623\u0633\u0641\u0644', 'type': 'HTML', 'sectionId': 'Ad-Footer', 'id': 'HTML105'}, {'title': '\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0641\u0648\u062a\u0631 \u0627\u0644\u0633\u0641\u0644\u064a\u0629', 'type': 'LinkList', 'sectionId': 'Footer-Menu', 'id': 'LinkList2'}]}]);
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML999', 'Ad-Clicks', document.getElementById('HTML999'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'Header-Section', document.getElementById('Header1'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML101', 'Ad-Top', document.getElementById('HTML101'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML102', 'Ad-Right', document.getElementById('HTML102'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML301', 'Fishes-Section', document.getElementById('HTML301'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML302', 'Fishes-Section', document.getElementById('HTML302'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML91', 'Matches-Yesterday', document.getElementById('HTML91'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML92', 'Matches-Today', document.getElementById('HTML92'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML93', 'Matches-Tomorrow', document.getElementById('HTML93'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML104', 'Ad-Below-Matches', document.getElementById('HTML104'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML201', 'Ad-Post-Top', document.getElementById('HTML201'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML202', 'Ad-Post-Middle', document.getElementById('HTML202'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'Main-Posts', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3943208901-lbx__ar.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/828616780-lightbox_bundle_rtl.css'}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML203', 'Ad-Post-Bottom', document.getElementById('HTML203'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML103', 'Ad-Left', document.getElementById('HTML103'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML105', 'Ad-Footer', document.getElementById('HTML105'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList2', 'Footer-Menu', document.getElementById('LinkList2'), {}, 'displayModeFull'));
+  document.getElementById("qualityBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.quality); };
+  document.getElementById("audioBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.audio); };
+  document.getElementById("speedBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.speed); };
+  document.getElementById("retryBtn").onclick = () => playServer(currentIndex, true);
+});
 </script>
 </body>
 </html>
