@@ -142,14 +142,6 @@
       .center-time { font-size: 16px; padding: 4px 10px; }
       .status-badge { padding: 4px 12px; font-size: 11px; }
     }
-    @media (max-width: 380px) {
-      .team img { width: 40px; height: 40px; }
-      .team-name { font-size: 11px; }
-      .center-value { font-size: 20px; }
-      .center-time { font-size: 14px; padding: 4px 8px; }
-      .status-badge { padding: 3px 10px; font-size: 10px; }
-      .match-teams { padding: 12px 5px; gap: 5px; }
-    }
   </style>
 </head>
 <body>
@@ -160,14 +152,12 @@
   <button class="header-btn" id="themeBtn"><i data-feather="moon"></i></button>
 </header>
 
-<!-- View 1: Matches List -->
 <div id="homeView" class="view active">
   <div id="matchesList">
     <div class="empty">جاري تحميل المباريات...</div>
   </div>
 </div>
 
-<!-- View 2: Match Details & Player -->
 <div id="matchView" class="view">
   <div id="matchHeaderCardContainer"></div>
 
@@ -208,14 +198,12 @@
           </div>
         </div>
 
-        <!-- Menus inside player -->
         <div class="control-menu" id="qualityMenu"></div>
         <div class="control-menu" id="audioMenu"></div>
         <div class="control-menu" id="speedMenu"></div>
       </div>
     </div>
 
-    <!-- Servers Links -->
     <div class="servers-container" id="serverStrip"></div>
   </div>
 </div>
@@ -238,7 +226,6 @@ document.addEventListener("DOMContentLoaded", function(){
   const db = firebase.database();
   const WORKER_BASE = "https://api1bas.yaqoopp2731.workers.dev/";
 
-  // UI Elements
   const els = {
     homeView: document.getElementById('homeView'),
     matchView: document.getElementById('matchView'),
@@ -280,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const getHomeLogo = m => m.homeLogo || m.home_logo || 'https://via.placeholder.com/100?text=H';
   const getAwayLogo = m => m.awayLogo || m.away_logo || 'https://via.placeholder.com/100?text=A';
 
-  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶٧٨٩".indexOf(d)); }    
+  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵٦٧٨٩".indexOf(d)); }    
   function format12Hour(time){
     if(!time) return "غير محدد";
     const m = toEng(time).trim().match(/(\d{1,2}):(\d{2})/);
@@ -335,7 +322,6 @@ document.addEventListener("DOMContentLoaded", function(){
     `;
   }
 
-  // Fetch from Realtime Database
   db.ref("matches").on("value", snap => {
     const data = snap.val() || {};
     const list = Object.values(data).filter(m => m && (m.published === true || String(m.published) === "true"));
@@ -381,7 +367,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
   els.backBtn.onclick = goHome;
 
-  // Theme Toggle
   function toggleTheme(){
     const isL = document.body.classList.toggle("light");
     localStorage.setItem("bsr_theme", isL ? "light" : "dark");
@@ -390,7 +375,6 @@ document.addEventListener("DOMContentLoaded", function(){
   if(localStorage.getItem("bsr_theme") === "light") toggleTheme();
   els.themeBtn.onclick = toggleTheme;
 
-  // Controls Visibility
   function showPlayerControls(){
     els.playerRoot.classList.remove("player-controls-hidden");
     clearTimeout(controlsTimer);
@@ -432,13 +416,36 @@ document.addEventListener("DOMContentLoaded", function(){
     els.video.pause(); els.video.removeAttribute("src"); els.video.load();
   }
 
-  // الدالة الفعالة بالكامل لفتح تطبيق com.beryan.player تلقائياً للهواتف
   async function playServer(i, useWorker = false){
     const src = currentServers[i]; if(!src) return;
     currentIndex = i; buildServerButtons(); suppressVideoError = true; await destroyPlayer();
     setTimeout(() => suppressVideoError = false, 1000);
     els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
 
+    // 1. الفحص إذا كان هاتفاً لتمرير المصفوفة بالصيغة المباشرة للمشغل الخارجي
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      els.loading.style.display = "none";
+      toastMsg("جاري تشغيل القنوات في Beryan Player...");
+
+      const beryanData = currentServers.map(s => ({
+        name_server: s.label || "سيرفر",
+        url_channel: s.url || "",
+        userAgent: s.ua || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        referer: s.ref || "",
+        drm_key: s.key || "",
+        origin: "",
+        type_player: "beryan_player_exo"
+      }));
+
+      const jsonString = JSON.stringify(beryanData);
+      const androidIntent = `intent://beryan_player_exo${jsonString}#Intent;scheme=xmtv;package=com.beryan.player;end`;
+      
+      window.location.href = androidIntent;
+      return;
+    }
+
+    // 2. البث الداخلي للمتصفحات العادية والـ PC
     let finalUrl = src.url;
     if(useWorker || src.ua || src.ref) {
       const p = new URLSearchParams({ url: src.url, _: Date.now() });
@@ -447,34 +454,6 @@ document.addEventListener("DOMContentLoaded", function(){
       finalUrl = WORKER_BASE + "?" + p.toString();
     }
 
-    // الفحص إذا كان هاتفاً لإرسال البث لتطبيق Beryan Player تلقائياً
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isMobile) {
-      els.loading.style.display = "none";
-      toastMsg("جاري تشغيل القناة في Beryan Player...");
-
-      // إرسال البث عبر حزمة الأندرويد com.beryan.player وتمرير اسم المباراة كعنوان للتميز
-      const androidIntent = `intent:${finalUrl}#Intent;package=com.beryan.player;type=video/*;scheme=http;S.title=${encodeURIComponent(els.headerTitle.textContent)};end`;
-      window.location.href = androidIntent;
-
-      // حل احتياطي: إذا لم يكن التطبيق ثابتاً، يشتغل المشغل الداخلي للمتصفح تلقائياً بعد 3 ثوانٍ
-      setTimeout(async () => {
-        if (!shakaPlayer) {
-          try {
-            els.loading.style.display = "block";
-            shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
-            shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
-            if(src.key) { const ck = src.key.split(":"); if(ck.length===2) shakaPlayer.configure({ drm: { clearKeys: { [ck[0]]: ck[1] } } }); }
-            await shakaPlayer.load(finalUrl); await els.video.play().catch(()=>{});
-            els.loading.style.display = "none";
-            updatePlayIcon(); showPlayerControls(); buildMenus();
-          } catch(e) {}
-        }
-      }, 3000);
-      return;
-    }
-
-    // التشغيل داخل المتصفح تلقائياً في حالة تصفح الكمبيوتر (Desktop PC)
     try{
       shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
       shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
@@ -491,9 +470,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  // بناء القوائم برمجياً وعزل الأحداث بالكامل
   function buildMenus(){
-    // 1. جودة البث
     els.menus.quality.innerHTML = "";
     const autoBtn = document.createElement("button");
     autoBtn.className = "menu-item active";
@@ -518,7 +495,6 @@ document.addEventListener("DOMContentLoaded", function(){
       });
     }
 
-    // 2. مسارات الصوت
     els.menus.audio.innerHTML = "";
     if(shakaPlayer) {
       const tracks = [...new Set(shakaPlayer.getVariantTracks().map(t=>t.language||"und"))];
@@ -534,7 +510,6 @@ document.addEventListener("DOMContentLoaded", function(){
       els.menus.audio.innerHTML = `<button class="menu-item active">الافتراضي</button>`;
     }
 
-    // 3. سرعة التشغيل
     els.menus.speed.innerHTML = "";
     [0.5, 1, 1.5, 2].forEach(s => {
       const btn = document.createElement("button");
@@ -596,10 +571,7 @@ document.addEventListener("DOMContentLoaded", function(){
       try {
         if(p.requestFullscreen) await p.requestFullscreen();
         else if(p.webkitRequestFullscreen) p.webkitRequestFullscreen();
-        
-        setTimeout(() => {
-          screen.orientation?.lock("landscape").catch(()=>{});
-        }, 200);
+        setTimeout(() => { screen.orientation?.lock("landscape").catch(()=>{}); }, 200);
       } catch(e) {}
     }
   };
