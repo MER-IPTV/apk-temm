@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const getHomeLogo = m => m.homeLogo || m.home_logo || 'https://via.placeholder.com/100?text=H';
   const getAwayLogo = m => m.awayLogo || m.away_logo || 'https://via.placeholder.com/100?text=A';
 
-  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)); }
+  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴٥٦٧٨٩".indexOf(d)); }
   
   function format12Hour(time){
     if(!time) return "غير محدد";
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function(){
     els.matchesList.innerHTML = "";
     if(!list.length) return els.matchesList.innerHTML = '<div class="empty">لا توجد مباريات حالياً</div>';
     
-    // التعديل هنا: ترتيب المباريات (المباشرة أولاً - التي لم تبدأ ثانياً - المنتهية أخيراً)
+    // ترتيب المباريات (المباشرة أولاً - التي لم تبدأ ثانياً - المنتهية أخيراً)
     list.sort((a, b) => {
       const statusOrder = { "live": 1, "soon": 2, "end": 3 };
       const valA = statusOrder[getStatus(a).cls] || 4;
@@ -465,12 +465,14 @@ document.addEventListener("DOMContentLoaded", function(){
     els.video.pause(); els.video.removeAttribute("src"); els.video.load();
   }
 
+  // --- تعديل دالة تشغيل السيرفرات لتدعم الـ Intent الخارجي للأندرويد ---
   async function playServer(i, useWorker = false){
     const src = currentServers[i]; if(!src) return;
     currentIndex = i; buildServerButtons(); suppressVideoError = true; await destroyPlayer();
     setTimeout(() => suppressVideoError = false, 1000);
-    els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
+    els.errorOverlay.style.display = "none";
 
+    // معالجة الرابط (مباشر أو عبر الووركر لتخطي القيود الحماية)
     let finalUrl = src.url;
     if(useWorker || src.ua || src.ref) {
       const p = new URLSearchParams({ url: src.url, _: Date.now() });
@@ -479,6 +481,20 @@ document.addEventListener("DOMContentLoaded", function(){
       finalUrl = WORKER_BASE + "?" + p.toString();
     }
 
+    // 📱 فحص نظام التشغيل: إذا كان أندرويد يتم الفتح تلقائياً بالمشغل الخارجي com.beryan.player
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    if(isAndroid) {
+      const matchTitle = encodeURIComponent(els.headerTitle.textContent || "البصري تيفي");
+      const cleanUrl = finalUrl.replace(/^https?:\/\//i, ''); // تنظيف البروتوكول الخارجي ليتكفل به الـ scheme
+      const intentUrl = `intent://beryan_player_exo${cleanUrl}#Intent;scheme=https;package=com.beryan.player;S.title=${matchTitle};end`;
+      
+      window.location.href = intentUrl; // إرسال الأمر لنظام الأندرويد لفتح التطبيق
+      toastMsg("جاري تحويل البث إلى Beryan Player...");
+      return; // كسر الدالة لمنع تحميل المشغل المدمج في الهاتف
+    }
+
+    // 💻 بيئة الكمبيوتر أو الأنظمة الأخرى: يشتغل المشغل الداخلي الافتراضي (Shaka)
+    els.loading.style.display = "block";
     try{
       shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
       shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
