@@ -75,7 +75,7 @@
     #matchesList { display: flex; flex-direction: column; gap: 6px; width: 100%; }
     .empty { padding: 40px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; text-align: center; color: var(--text-muted); font-size: 16px; font-weight: 700; }
 
-    /* 📌 تحويل كرت المباراة بالتدقيق الكامل كما بالصورة الرسمية */
+    /* كرت المباراة الأفقي الاحترافي الدقيق */
     .match-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; overflow: hidden; position: relative; transition: background 0.2s ease; }
     .match-card.clickable:hover { background: #002d87; cursor: pointer; }
     
@@ -151,7 +151,6 @@
     .menu-item:hover, .menu-item.active{ background:rgba(255,255,255,.1); color: var(--accent); }
     .speed-text{ color:#fff; font-size:12px; font-weight:900; pointer-events:none;}
 
-    /* استجابة مطلقة ودقيقة لجميع مقاسات شاشات الموبايل المتنوعة */
     @media (max-width: 600px) {
       .team-name-display { font-size: 12px; max-width: 90px; }
       .team-logo-wrapper { width: 32px; height: 32px; padding: 2px; }
@@ -244,7 +243,19 @@
 document.addEventListener("DOMContentLoaded", function(){
   feather.replace();
 
-  // Firebase Init
+  // رابط الـ Worker الجديد والخاص بك من الكود المدخل
+  const WORKER_BASE = "https://api.albasritv1.workers.dev/";
+
+  // تنظيف ومعالجة الروابط لصور الشعارات
+  function getCleanImg(url) {
+    if (!url) return "https://via.placeholder.com/55x55/151c2c/ffffff?text=TEAM";
+    let u = url.trim();
+    if (u.startsWith("http://") || u.startsWith("https://")) return u;
+    if (u.startsWith("//")) return "https:" + u;
+    return "https://koooracity.com/" + u.replace(/^\//, '');
+  }
+
+  // Firebase Config الأصلي الثابت
   const firebaseConfig = {
     apiKey: "AIzaSyAGhmOqXWxmr2ULOzNMMDuLlxCeTmUNpis",
     databaseURL: "https://frsin-araq-default-rtdb.firebaseio.com",
@@ -255,7 +266,6 @@ document.addEventListener("DOMContentLoaded", function(){
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-  const WORKER_BASE = "https://api1bas.yaqoopp2731.workers.dev/";
 
   // UI Elements
   const els = {
@@ -298,8 +308,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
   const getHomeName = m => m.home || m.home_name || m.homeName || "المستضيف";
   const getAwayName = m => m.away || m.away_name || m.awayName || "الضيف";
-  const getHomeLogo = m => m.homeLogo || m.home_logo || 'https://via.placeholder.com/100?text=H';
-  const getAwayLogo = m => m.awayLogo || m.away_logo || 'https://via.placeholder.com/100?text=A';
   const getCommentator = m => m.commentator || m.commenter || m.channel || "معلق المباراة";
 
   function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴٥٦۷۸۹".indexOf(d)); }
@@ -332,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function(){
     return s.filter(x => x && x.url).map(x => ({ label: x.label||x.name||"سيرفر", url: x.url||"", ua: x.userAgent||"", ref: x.referer||"", key: x.drmKey||x.clearKey||"" }));
   }
 
-  // إنشاء الكروت الأفقيّة المتطابقة تماماً وبدقة متناهية مع الصورة المدخلة
+  // بناء هيكل كرت المباراة مع دمج دالة getCleanImg لتطهير روابط الصور
   function buildCardHTML(m, isClickable = true){
     const status = getStatus(m);
     const timeOrScore = status.isLive || status.cls === 'end' ? getScore(m) : format12Hour(m.time || m.match_time);
@@ -348,13 +356,13 @@ document.addEventListener("DOMContentLoaded", function(){
           <div class="match-teams-center">
             <span class="team-name-display">${getHomeName(m)}</span>
             <div class="team-logo-wrapper">
-              <img src="${getHomeLogo(m)}" loading="lazy">
+              <img src="${getCleanImg(m.homeLogo || m.home_logo)}" loading="lazy">
             </div>
             
             <span class="match-vs-divider">-</span>
             
             <div class="team-logo-wrapper">
-              <img src="${getAwayLogo(m)}" loading="lazy">
+              <img src="${getCleanImg(m.awayLogo || m.away_logo)}" loading="lazy">
             </div>
             <span class="team-name-display">${getAwayName(m)}</span>
           </div>
@@ -477,6 +485,7 @@ document.addEventListener("DOMContentLoaded", function(){
     els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
 
     let finalUrl = src.url;
+    // استخدام الرابط الجديد للـ Worker الخاص بك عند تشفير او حماية التدفقات
     if(useWorker || src.ua || src.ref) {
       const p = new URLSearchParams({ url: src.url, _: Date.now() });
       if(src.ua) p.set("ua", src.ua); if(src.ref) p.set("ref", src.ref);
