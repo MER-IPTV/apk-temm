@@ -9,32 +9,32 @@
     <script src='https://cdn.jsdelivr.net/npm/hls.js@latest'></script>
 
     <b:skin><![CDATA[
-        /* تنسيق افتراضي لضمان ظهور المحتوى وتصفير الهوامش */
+        /* تصفير الهوامش وضمان عمل الخلفية المارونية العميقة لكأس العالم */
         body {
             margin: 0 !important;
             padding: 0 !important;
-            background: #400220 !important; /* الخلفية المارونية العميقة */
-            color: white;
+            background: #2c0216 !important;
+            color: #ffffff;
             font-family: 'Tajawal', sans-serif !important;
         }
-        /* إخفاء عناصر بلوجر الجانبية */
+        /* إخفاء إضافات بلوجر الافتراضية لعرض كامل واحترافي */
         .navbar, #navbar-iframe, .footer-section, .quickedit, .post-feeds { display: none !important; }
     ]]></b:skin>
     
     <style>
         :root {
-            --qatar-maroon: #56042c;   /* اللون الماروني العنابي الأساسي */
-            --qatar-dark: #2c0216;     /* ماروني غامق جداً للخلفيات */
-            --qatar-gold: #bcc695;     /* اللون الذهبي الأنيق للأطر */
+            --qatar-maroon: #56042c;   /* العنابي القطري */
+            --qatar-dark: #2c0216;     /* الماروني الغامق للخلفية الخلفية */
+            --qatar-gold: #bcc695;     /* الذهبي الهادئ للأطر والأيقونات */
             --card-white: #ffffff;     /* خلفية الكروت البيضاء الدائرية */
-            --text-dark: #2c2c2c;      /* نصوص داكنة داخل الكرت */
+            --text-dark: #2c2c2c;      /* لون نصوص الفرق */
             --time-red: #e50914;       /* الأحمر الناري للوقت والنتيجة */
             --text-gray: #a0aec0;
         }
 
         body {
             background-color: var(--qatar-dark) !important;
-            background-image: radial-gradient(circle at 50% 0%, rgba(86, 4, 44, 0.6) 0%, transparent 70%) !important;
+            background-image: radial-gradient(circle at 50% 0%, rgba(86, 4, 44, 0.6) 0%, transparent 75%) !important;
             min-height: 100vh;
         }
 
@@ -46,7 +46,7 @@
             box-sizing: border-box;
         }
 
-        /* الهيدر العلوي المطور المطابق لثيم كأس العالم */
+        /* الهيدر العلوي لجدول المباريات */
         .header-table {
             text-align: center;
             margin-bottom: 35px;
@@ -63,7 +63,6 @@
             margin: 0 0 12px 0;
             box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            letter-spacing: -0.5px;
         }
 
         .date-sub {
@@ -77,20 +76,20 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* فواصل المجموعات والأقسام */
+        /* فواصل البطولات والمجموعات */
         .section-divider {
             text-align: center;
             color: var(--qatar-gold);
             font-size: 0.95rem;
             font-weight: 700;
-            margin: 25px 0 8px 0;
+            margin: 25px 0 10px 0;
             letter-spacing: 0.5px;
         }
 
-        /* كرت المباراة الدائري والبيضاوي الاحترافي */
+        /* كرت المباراة الدائري والبيضاوي الانسيابي */
         .match-card {
             background: var(--card-white);
-            border-radius: 50px; /* تصميم بيضاوي انسيابي بالكامل */
+            border-radius: 50px; 
             display: grid;
             grid-template-columns: 1fr 120px 1fr;
             align-items: center;
@@ -116,7 +115,7 @@
             border-color: var(--qatar-gold);
         }
 
-        /* الفرق والشعارات داخل الكرت الأبيض */
+        /* تنسيق أسماء الفرق والشعارات */
         .team {
             display: flex;
             align-items: center;
@@ -146,7 +145,7 @@
             flex-shrink: 0;
         }
 
-        /* صندوق الوقت والنتيجة في المنتصف */
+        /* منطقة المنتصف (الوقت والنتيجة وحالة البث) */
         .match-info {
             display: flex;
             flex-direction: column;
@@ -177,10 +176,9 @@
             padding: 6px 0;
             border-radius: 50px;
             box-shadow: inset 0 0 12px rgba(0,0,0,0.25);
-            letter-spacing: 1px;
         }
 
-        /* اسم الملعب تحت الكرت */
+        /* تفاصيل ملعب المباراة */
         .stadium-details {
             text-align: center;
             color: #ffffff;
@@ -197,14 +195,14 @@
         .msg {
             text-align: center;
             color: var(--qatar-gold);
-            padding: 40px 0;
+            padding: 50px 0;
             font-weight: 700;
             font-size: 1.1rem;
         }
 
         .hidden { display: none !important; }
 
-        /* منطقة المشغل المتطورة */
+        /* أزرار المشغل والعودة للجدول */
         .back-btn {
             background: rgba(255, 255, 255, 0.05);
             color: #fff;
@@ -244,7 +242,7 @@
             display: block;
         }
 
-        /* صندوق السيرفرات الاحترافي */
+        /* صندوق السيرفرات البديلة */
         .servers-box {
             background: rgba(44, 2, 22, 0.5);
             padding: 20px;
@@ -295,7 +293,6 @@
             100% { opacity: 1; }
         }
 
-        /* التجاوب والتوافق التام مع الجوال */
         @media (max-width: 600px) {
             .main-header-title { font-size: 1.4rem; padding: 8px 30px; }
             .match-card { grid-template-columns: 1fr 95px 1fr; padding: 6px 15px; }
@@ -320,21 +317,23 @@
                     </div>
                 </div>
 
-                <div class='msg' id='state-msg'>جاري جلب أحداث ولقاءات اليوم الحية...</div>
+                <div class='msg' id='state-msg'>جاري جلب مباريات ولقاءات اليوم الحية...</div>
                 
                 <div class='hidden' id='matches-list'></div>
 
                 <div class='hidden' id='player-view'>
-                    <button class='back-btn' onclick='goBack()'><i class='fa-solid fa-arrow-right'/> العودة لجدول المباريات</button>
+                    <button class='back-btn' onclick='goBack()'><i class='fa-solid fa-arrow-right'/> العودة للجدول</button>
                     
                     <div id='current-match-card'/>
-                    <div style='margin-bottom: 15px;'/> <div class='video-wrapper'>
+                    <div style='margin-bottom: 15px;'/> 
+
+                    <div class='video-wrapper'>
                         <iframe allowfullscreen='true' class='hidden' id='iframe-player' scrolling='no' src=''/>
                         <video autoplay='' controls='' id='hls-player' playsinline=''/>
                     </div>
                     
                     <div class='servers-box'>
-                        <div class='servers-title'><i class='fa-solid fa-layer-group'/> سيرفرات البث المتعددة الاحتياطية:</div>
+                        <div class='servers-title'><i class='fa-solid fa-layer-group'/> سيرفرات البث الاحتياطية المتوفرة:</div>
                         <div class='servers-list' id='servers-render'></div>
                     </div>
                 </div>
@@ -353,9 +352,11 @@
                 const liveDateSync = document.getElementById("live-date-sync");
                 let activeHls = null;
 
-                // تحديث التاريخ تلقائياً بالصفحة
-                const options = { weekday: 'long', day: 'numeric', month: 'long' };
-                liveDateSync.innerText = new Date().toLocaleDateString('ar-EG', options);
+                // تحديث التاريخ الحالي تلقائياً بالصيغة العربية العربية الفصحى
+                if (liveDateSync) {
+                    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                    liveDateSync.innerText = new Date().toLocaleDateString('ar-EG', options);
+                }
 
                 function getCleanImg(url) {
                     if (!url) return "https://via.placeholder.com/40x30/ffffff/000000?text=FLAG";
@@ -396,6 +397,7 @@
                     `;
                 }
 
+                // الاتصال بـ Worker للـ API
                 async function loadData() {
                     try {
                         const res = await fetch(WORKER_URL);
@@ -406,7 +408,7 @@
                             stateMsg.innerText = "لا تتوفر مباريات مجدولة حالياً بالسيرفر.";
                         }
                     } catch (e) {
-                        stateMsg.innerText = "فشل الاتصال بخادم المباريات الرئيسي.";
+                        stateMsg.innerText = "فشل الاتصال التلقائي بخادم المباريات الرئيسي.";
                     }
                 }
 
@@ -425,7 +427,8 @@
                         let statusTxt = m.status;
                         let centerText = "";
                         const scoreStr = `${m.team1.goals || 0} : ${m.team2.goals || 0}`;
-                        let groupName = m.round_name || "جدول مباريات اليوم";
+                        
+                        let groupName = m.round_name || m.tournament || "بطولة اليوم الإقليمية";
 
                         if (m.priority === 1) {
                             statusTxt = "مباشر الآن"; statusClass = "live";
@@ -438,7 +441,7 @@
                             centerText = cleanTime(m.time);
                         }
 
-                        // إضافة قسم البطولة أو المجموعة
+                        // رندرة فواصل المجموعات والبطولات تلقائياً لكل مباراة
                         let divGroup = document.createElement("div");
                         divGroup.className = "section-divider";
                         divGroup.innerHTML = `<i class="fa-solid fa-trophy" style="font-size:11px;"></i> ${groupName}`;
@@ -450,14 +453,18 @@
                         divCard.className = "match-card";
                         divCard.innerHTML = html;
                         
-                        // ملعب افتراضي أنيق إذا لم يتوفر من السيرفر
                         let stadiumTxt = m.stadium || "استاد المدينة الرياضية الدولي";
                         let divStadium = document.createElement("div");
                         divStadium.className = "stadium-details";
                         divStadium.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${stadiumTxt}`;
 
                         divCard.onclick = () => {
-                            currentMatchCard.innerHTML = `<div class="match-card static-card">${html}</div><div class="stadium-details">${divStadium.innerHTML}</div>`;
+                            if (currentMatchCard) {
+                                currentMatchCard.innerHTML = `
+                                    <div class="match-card static-card">${html}</div>
+                                    <div class="stadium-details" style="margin-top:10px;">${divStadium.innerHTML}</div>
+                                `;
+                            }
                             loadLiveLinks(m.link);
                         };
 
@@ -466,6 +473,7 @@
                     });
                 }
 
+                // جلب روابط البث الخارجي للمباراة المحددة من خلال رابط الـ API المرفق بالمباراة
                 async function loadLiveLinks(linkUrl) {
                     matchesList.classList.add("hidden");
                     stateMsg.classList.remove("hidden");
@@ -488,7 +496,7 @@
                                 
                                 let name = srv.name;
                                 if(name.includes("M3U")) name = "جودة متعددة HD " + (i + 1);
-                                else if(name.includes("Web")) name = "سيرفر خارجي أساسي " + (i + 1);
+                                else if(name.includes("Web")) name = "سيرفر رئيسي " + (i + 1);
 
                                 btn.innerText = name;
                                 btn.onclick = (e) => playStream(srv.url, srv.type, e.target);
@@ -502,16 +510,20 @@
                     }
                 }
 
+                // معالجة تشغيل الروابط (Iframe أو HLS .m3u8 الذكي) تلقائياً
                 function playStream(url, type, btn) {
                     resetStream();
                     if (type === "m3u8" || url.includes(".m3u8")) {
                         iframePlayer.classList.add("hidden");
                         hlsPlayer.classList.remove("hidden");
                         if (Hls.isSupported()) {
-                            activeHls = new Hls(); activeHls.loadSource(url); activeHls.attachMedia(hlsPlayer);
+                            activeHls = new Hls(); 
+                            activeHls.loadSource(url); 
+                            activeHls.attachMedia(hlsPlayer);
                             activeHls.on(Hls.Events.MANIFEST_PARSED, () => hlsPlayer.play().catch(()=>{}));
                         } else if (hlsPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                            hlsPlayer.src = url; hlsPlayer.play().catch(()=>{});
+                            hlsPlayer.src = url; 
+                            hlsPlayer.play().catch(()=>{});
                         }
                     } else {
                         hlsPlayer.classList.add("hidden");
@@ -527,7 +539,9 @@
                 function resetStream() {
                     iframePlayer.src = "";
                     if (activeHls) { activeHls.destroy(); activeHls = null; }
-                    hlsPlayer.pause(); hlsPlayer.removeAttribute('src'); hlsPlayer.load();
+                    hlsPlayer.pause(); 
+                    hlsPlayer.removeAttribute('src'); 
+                    hlsPlayer.load();
                 }
 
                 function goBack() {
@@ -536,6 +550,7 @@
                     matchesList.classList.remove("hidden");
                 }
 
+                // انطلاق جلب البيانات فور تحميل الصفحة
                 loadData();
                 //]]>
             </script>
