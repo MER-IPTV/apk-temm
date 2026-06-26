@@ -1,557 +1,636 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WD9CGH9TV0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-WD9CGH9TV0');
-  </script>
-  
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beryan TV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;900&display=swap" rel="stylesheet">
 
-  <title>البصري تيفي للبث المباشر</title>
-  <meta name="description" content="مشاهدة مباريات اليوم بث مباشر بدون تقطيع، بث مباشر القنوات الرياضية HD.">
-  <meta name="theme-color" content="#031330">
-
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.13/shaka-player.compiled.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-  <style>
-    :root {
-      /* الألوان الأصلية الدقيقة من الصورة لباقة القنوات الشهيرة */
-      --bg: #031330;
-      --bg-gradient: linear-gradient(180deg, #021a4a 0%, #031330 100%);
-      --card-bg: #002266;
-      --card-border: rgba(255, 255, 255, 0.15);
-      --header-bg: #021436;
-      --text-main: #ffffff;
-      --text-muted: #a6c4f7;
-      --accent: #f8c102; /* اللون الأصفر الذهبي الفاقع من الصورة */
-      --live: #e11d48;
-      --soon: #10b981;
-      --end: #64748b;
-    }
-    
-    body.light {
-      --bg: #f0f4f8;
-      --bg-gradient: linear-gradient(180deg, #e2ebf0 0%, #f0f4f8 100%);
-      --card-bg: #ffffff;
-      --card-border: rgba(0, 0, 0, 0.1);
-      --header-bg: #ffffff;
-      --text-main: #0c1a30;
-      --text-muted: #62758d;
-      --accent: #e5b20d;
-    }
-
-    * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
-    html, body { margin: 0; padding: 0; width: 100%; min-height: 100%; font-family: 'Tajawal', sans-serif; background: var(--bg); background: var(--bg-gradient); color: var(--text-main); overflow-x: hidden; }
-
-    /* Header */
-    header { background: var(--header-bg); height: 65px; display: flex; align-items: center; justify-content: space-between; position: fixed; width: 100%; top: 0; z-index: 50; padding: 0 16px; border-bottom: 2px solid var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: 0.3s; }
-    header h3 { margin: 0; font-size: 18px; font-weight: 900; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; direction: ltr; color: #fff; }
-    .header-btn { width: 42px; height: 42px; border-radius: 8px; background: rgba(255,255,255,0.08); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--card-border); transition: 0.2s; }
-    .header-btn:active { transform: scale(0.9); }
-
-    /* البطولة وتصميم البانر المماثل للصورة الأعلى */
-    .league-info { text-align: center; margin-top: 85px; padding: 0 16px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .league-title { font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-    .league-season { font-size: 14px; font-weight: 700; color: var(--text-muted); opacity: 0.8; }
-    .league-badge { background: var(--accent); color: #000; font-weight: 900; font-size: 16px; padding: 6px 35px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-top: 5px; width: 100%; max-width: 450px; text-align: center; }
-
-    /* App Views */
-    .view { display: none; padding: 0 12px 24px; max-width: 700px; margin-left: auto; margin-right: auto; flex-direction: column; gap: 8px; animation: fadeIn 0.4s ease forwards; }
-    .view.active { display: flex; }
-    #homeView { margin-top: 15px; }
-    #matchView { margin-top: 85px; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Matches List */
-    #matchesList { display: flex; flex-direction: column; gap: 6px; width: 100%; }
-    .empty { padding: 40px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; text-align: center; color: var(--text-muted); font-size: 16px; font-weight: 700; }
-
-    /* كرت المباراة الأفقي الاحترافي الدقيق */
-    .match-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; overflow: hidden; position: relative; transition: background 0.2s ease; }
-    .match-card.clickable:hover { background: #002d87; cursor: pointer; }
-    
-    .match-teams { display: flex; align-items: center; height: 60px; direction: rtl; }
-    
-    /* اليمين: التوقيت بالخلفية الصفراء الحادة */
-    .match-time-container { width: 85px; height: 100%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #000; border-left: 1px solid rgba(0,0,0,0.1); }
-    
-    /* المنتصف: أفرقة وشعارات متناسقة */
-    .match-teams-center { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 10px; gap: 8px; }
-    .team-name-display { font-size: 14px; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; text-align: center; }
-    .team-logo-wrapper { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.05); border-radius: 50%; padding: 4px; border: 1px solid rgba(255,255,255,0.1); }
-    .team-logo-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-    .match-vs-divider { font-size: 15px; font-weight: 800; color: var(--text-muted); padding: 0 4px; }
-    
-    /* اليسار: المعلق وحالة المباراة المباشرة */
-    .match-meta-left { width: 120px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--card-border); background: rgba(0,0,0,0.15); padding: 0 5px; }
-    .commentator-name { font-size: 12px; font-weight: 700; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-    .status-indicator-badge { font-size: 9px; font-weight: 800; color: #fff; padding: 1px 6px; border-radius: 3px; margin-top: 3px; text-transform: uppercase; }
-    .status-indicator-badge.live { background: var(--live); animation: pulseLive 1.5s infinite; }
-    .status-indicator-badge.soon { background: transparent; color: var(--text-muted); border: 1px solid var(--card-border); }
-    .status-indicator-badge.end { background: var(--end); }
-
-    @keyframes pulseLive { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
-
-    /* Player Container */
-    .player-section { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--card-border); padding: 12px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-    .player-frame-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05); }
-    #playerRoot { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-    video { width: 100%; height: 100%; object-fit: contain; }
-    
-    /* Servers List */
-    .servers-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-    .servers-container::-webkit-scrollbar { display: none; }
-    .server-btn { border: 1px solid var(--card-border); background: rgba(0,0,0,0.2); color: var(--text-main); padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal'; font-weight: 700; font-size: 13px; white-space: nowrap; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
-    .server-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 800; }
-
-    /* Player UI Controls */
-    .player-bottom{ position:absolute; left:0; right:0; bottom:0; z-index:99; padding:15px; background:linear-gradient(to top, rgba(0,0,0,.9), transparent); transition: 0.3s; }
-    .progress{ height:5px; background:rgba(255,255,255,.3); border-radius:999px; position:relative; overflow:hidden; margin-bottom:10px; cursor:pointer; }
-    .progress-played{ position:absolute; top:0; bottom:0; left:0; width:0; background:var(--accent); transition: width 0.1s linear;}
-    .bottom-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; direction:ltr; }
-    .time-label{ color:#fff; font-size:13px; font-weight:700; letter-spacing: 1px;}
-    .icon-row{ display:flex; gap:6px; flex-wrap:wrap; justify-content: flex-end;}
-    
-    .pbtn{ width:38px; height:38px; border:none; border-radius:10px; background:rgba(255,255,255,.15); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(10px); }
-    .pbtn i { width: 18px; height: 18px; pointer-events: none; }
-    
-    .center-control{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:99; display:flex; align-items:center; gap:20px; transition: 0.3s; }
-    .round-btn{ border:none; border-radius:50%; background:rgba(0,0,0,.5); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
-    .round-btn.big{ width:65px; height:65px; } .round-btn.small{ width:45px; height:45px; }
-    .round-btn i{ width:28px; height:28px; pointer-events: none;} .round-btn.small i{ width:20px; height:20px; }
-
-    .player-controls-hidden .player-bottom { transform: translateY(100%); opacity: 0; }
-    .player-controls-hidden .center-control { opacity: 0; transform: translate(-50%, -50%) scale(0.9); pointer-events: none; }
-
-    #loading, #buffer{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; display:none; z-index:100; animation:spin 1s linear infinite; }
-    #loading{ width:50px; height:50px; border:4px solid rgba(255,255,255,.2); border-top-color:var(--accent); }
-    #buffer{ width:60px; height:60px; border:4px solid rgba(255,255,255,.2); border-top-color:var(--accent); }
-    @keyframes spin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
-
-    #errorOverlay{ position:absolute; inset:0; background:rgba(0,0,0,.9); color:#fff; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; z-index:101; }
-    .retry{ border:none; padding:10px 24px; border-radius:12px; background:var(--accent); color:#000; font-weight:900; cursor:pointer; margin-top: 15px; font-family:'Tajawal'; }
-    
-    .toast{ position:fixed; z-index:10001; right:50%; bottom:30px; transform:translateX(50%); background:rgba(0,0,0,.85); color:#fff; padding:12px 24px; border-radius:999px; display:none; font-weight:800; font-size: 14px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
-    .toast.show{ display:block; animation: popUp 0.3s ease forwards; }
-    @keyframes popUp { from { opacity: 0; transform: translate(50%, 20px); } to { opacity: 1; transform: translate(50%, 0); } }
-
-    /* Menus */
-    .control-menu{ position:absolute; left:10px; bottom:65px; z-index:102; min-width:180px; max-height:220px; overflow-y:auto; background:rgba(15,23,42,.95); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:8px; display:none; backdrop-filter:blur(10px); direction: rtl;}
-    .control-menu.show{ display:block; }
-    .menu-item{ width:100%; border:none; background:transparent; color:#fff; padding:10px; border-radius:10px; font-family:'Tajawal'; font-weight:800; text-align:right; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;}
-    .menu-item:hover, .menu-item.active{ background:rgba(255,255,255,.1); color: var(--accent); }
-    .speed-text{ color:#fff; font-size:12px; font-weight:900; pointer-events:none;}
-
-    @media (max-width: 600px) {
-      .team-name-display { font-size: 12px; max-width: 90px; }
-      .team-logo-wrapper { width: 32px; height: 32px; padding: 2px; }
-      .match-time-container { width: 70px; font-size: 13px; }
-      .match-meta-left { width: 95px; }
-      .league-title { font-size: 18px; }
-      .league-badge { font-size: 14px; padding: 5px 15px; }
-    }
-    @media (max-width: 370px) {
-      .team-name-display { font-size: 11px; max-width: 70px; }
-      .match-time-container { width: 60px; font-size: 11px; }
-      .match-meta-left { width: 80px; }
-      .commentator-name { font-size: 11px; }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <button class="header-btn" id="backBtn" style="visibility: hidden;"><i data-feather="arrow-right"></i></button>
-  <h3 id="headerTitle">المباريات المباشرة</h3>
-  <button class="header-btn" id="themeBtn"><i data-feather="moon"></i></button>
-</header>
-
-<div class="league-info" id="leagueBanner">
-  <div class="league-title">جدول المباريات المباشرة</div>
-  <div class="league-season">2025-2026</div>
-  <div class="league-badge">توقيت مكة المكرمة | بث مباشر وحصري</div>
-</div>
-
-<div id="homeView" class="view active">
-  <div id="matchesList">
-    <div class="empty">جاري تحميل المباريات...</div>
-  </div>
-</div>
-
-<div id="matchView" class="view">
-  <div id="matchHeaderCardContainer"></div>
-
-  <div class="player-section">
-    <div class="player-frame-wrapper" id="playerWrapper">
-      <div id="playerRoot">
-        <video id="video" playsinline autoplay></video>
+    <style>
+        /* نظام الألوان الفاخر الموحد */
+        :root { 
+            --bg-dark: #070708;          
+            --bg-gradient: #0f1015;      
+            --tod-yellow: #ffcc00; 
+            --card-purple: rgba(30, 30, 40, 0.45); 
+            --text-white: #ffffff; 
+            --live-green: #00ff66; 
+            --accent-blue: #00e5ff; 
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        } 
         
-        <div id="loading"></div>
-        <div id="buffer"></div>
+        * { 
+            box-sizing: border-box; 
+            transition: var(--transition-smooth); 
+        } 
+        
+        body { 
+            margin: 0; 
+            background: radial-gradient(circle at top, #161925 0%, var(--bg-dark) 70%);
+            color: var(--text-white); 
+            font-family: 'Cairo', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            overflow-x: hidden; 
+            padding-bottom: 100px; 
+            -webkit-tap-highlight-color: transparent;
+        } 
 
-        <div id="errorOverlay">
-          <i data-feather="alert-triangle" style="width: 45px; height: 45px; margin-bottom: 10px; color: var(--live);"></i>
-          <h4 id="errorTitle" style="margin: 0 0 5px;">عذراً</h4>
-          <p id="errorMsg" style="color: #cbd5e1; font-size: 13px; margin:0;">تعذر تشغيل الفيديو.</p>
-          <button class="retry" id="retryBtn">إعادة المحاولة</button>
+        .app-container { 
+            width: 100%; 
+            max-width: 430px; 
+            min-height: 100vh; 
+            position: relative; 
+            padding: 0 16px; 
+        } 
+        
+        /* HEADER */ 
+        .header-icons { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px 4px 12px; 
+        } 
+        .top-logo { 
+            font-size: clamp(22px, 6vw, 26px); 
+            font-weight: 900; 
+            letter-spacing: 1.5px; 
+            color: var(--text-white); 
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.3); 
+        } 
+        .header-icons a { 
+            color: var(--text-white); 
+            font-size: 20px; 
+            text-decoration: none; 
+            opacity: 0.8; 
+        } 
+        .header-icons a:hover { 
+            opacity: 1; 
+            color: var(--accent-blue); 
+            transform: scale(1.1);
+        }
+        
+        /* HERO SECTION */ 
+        .hero-section { 
+            position: relative; 
+            width: 100%; 
+            height: 280px; 
+            margin: 10px auto 20px; 
+            border-radius: 24px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7); 
+            border: 1px solid var(--glass-border); 
+        } 
+        .players-bg { 
+            position: absolute; 
+            inset: 0; 
+            background-image: url('https://assets.goal.com/images/v3/blt4398b88ddc4a04d2/World%20Cup%20Power%20Rankings%20(3).jpg?auto=webp&format=pjpg&width=3840&quality=60'); 
+            background-size: cover; 
+            background-position: center; 
+            transform: scale(1.02);
+        } 
+        .hero-overlay { 
+            position: absolute; 
+            inset: 0; 
+            background: linear-gradient(to top, rgba(7,7,8,1) 20%, rgba(7,7,8,0.4) 60%, rgba(0,0,0,0) 100%); 
+        } 
+         
+        /* MATCHES SLIDER */ 
+        .matches-container { 
+            position: absolute; 
+            bottom: 15px; 
+            width: 100%; 
+            z-index: 10; 
+            overflow: hidden; 
+        } 
+        .matches-title { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            padding-inline: 16px; 
+            margin-bottom: 12px; 
+            color: var(--tod-yellow); 
+            font-size: 13px; 
+            font-weight: 800; 
+            text-shadow: 0 2px 10px rgba(255,204,0,0.2); 
+        } 
+         
+        .matches-slider-wrapper { 
+            display: flex; 
+            width: max-content; 
+            animation: infiniteScroll 40s linear infinite; 
+            will-change: transform;
+        } 
+        .matches-slider-wrapper:hover { 
+            animation-play-state: paused; 
+        }
+        .matches-slider { 
+            display: flex; 
+            gap: 14px; 
+            padding-inline: 8px; 
+        } 
+        
+        .match-card { 
+            min-width: 245px; 
+            max-width: 245px; 
+            background: var(--card-purple); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px; 
+            padding: 14px; 
+            border: 1px solid var(--glass-border); 
+            flex-shrink: 0; 
+            cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            contain: content;
+        } 
+        .match-card:hover { 
+            transform: translateY(-4px); 
+            border-color: rgba(0, 229, 255, 0.4); 
+            box-shadow: 0 12px 25px rgba(0,229,255,0.2); 
+        }
+        .match-header { 
+            text-align: center; 
+            font-size: 11px; 
+            color: #b3b3b3; 
+            margin-bottom: 12px; 
+            font-weight: 700; 
+            border-bottom: 1px solid rgba(255,255,255,0.06); 
+            padding-bottom: 6px; 
+        } 
+        .match-body { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        } 
+        .team { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            width: 35%; 
+        } 
+        .team img { 
+            width: 38px; 
+            height: 38px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); 
+        } 
+        .team-name { 
+            font-size: 11px; 
+            font-weight: 700; 
+            text-align: center; 
+            color: #fff; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            width: 100%; 
+        } 
+        .match-center { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 30%; 
+        } 
+        .match-time { 
+            font-size: 14px; 
+            font-weight: 900; 
+            color: var(--tod-yellow); 
+        } 
+        .match-status { 
+            margin-top: 6px; 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 9px; 
+            font-weight: 800; 
+            letter-spacing: 0.5px; 
+        } 
+        .status-live { 
+            background: rgba(0,255,102,0.15); 
+            color: var(--live-green); 
+            box-shadow: 0 0 10px rgba(0,255,102,0.2); 
+            animation: pulse 1.5s infinite; 
+        } 
+        .status-upcoming { 
+            background: rgba(255,255,255,0.07); 
+            color: #ccc; 
+        } 
+        .channel-name { 
+            margin-top: 6px; 
+            font-size: 9px; 
+            color: #a0a0a0; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+        } 
+         
+        @keyframes infiniteScroll { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        /* SECTION HEADER GENERAL */
+        .section-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin: 25px 4px 15px; 
+            font-size: 16px; 
+            font-weight: 800; 
+            color: #fff; 
+        }
+        .section-header i { 
+            color: var(--accent-blue); 
+            font-size: 13px; 
+        }
+
+        /* CATEGORIES */ 
+        .hero-categories { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 8px; 
+            margin-bottom: 10px; 
+        } 
+        .cat-box { 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 16px; 
+            padding: 12px 4px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            text-decoration: none; 
+            color: #e0e0e0; 
+            font-size: 11px; 
+            font-weight: 700; 
+            text-align: center; 
+        } 
+        .cat-box i { 
+            color: var(--accent-blue); 
+            font-size: 22px; 
+            text-shadow: 0 4px 10px rgba(0,229,255,0.2); 
+        } 
+        .cat-box:hover { 
+            background: rgba(0,229,255,0.1); 
+            border-color: var(--accent-blue); 
+            transform: translateY(-3px); 
+            color: #fff; 
+        }
+
+        /* LEAGUES */ 
+        .leagues-list { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+        } 
+        .league-item { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid var(--glass-border);
+            border-radius: 20px; 
+            padding: 14px 6px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            text-decoration: none; 
+            min-height: 100px; 
+            justify-content: center;
+        } 
+        .league-item img { 
+            width: 40px; 
+            height: 40px; 
+            object-fit: contain; 
+            margin-bottom: 8px; 
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); 
+        } 
+        .league-item span { 
+            color: #ffffff; 
+            font-size: 10px; 
+            font-weight: 700; 
+            line-height: 1.3; 
+        } 
+        .league-item:hover { 
+            background: rgba(255,255,255,0.07); 
+            transform: scale(1.05); 
+            border-color: rgba(255,255,255,0.2); 
+        }
+
+        /* SOCIAL */ 
+        .social-bar { 
+            margin: 35px auto 20px; 
+            width: fit-content; 
+            padding: 10px 24px; 
+            border-radius: 50px; 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--glass-border); 
+            display: flex; 
+            align-items: center; 
+            gap: 18px; 
+        } 
+        .social-bar span { 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: #aaa; 
+        }
+        .social-icons { 
+            display: flex; 
+            gap: 14px; 
+        } 
+        .social-icons a { 
+            color: var(--tod-yellow); 
+            font-size: 18px; 
+            text-decoration: none; 
+        } 
+        .social-icons a:hover { 
+            transform: scale(1.25); 
+            color: #fff; 
+        }
+        .loading-text { 
+            width: 100%; 
+            text-align: center; 
+            padding: 20px; 
+            color: #bbb; 
+            font-size: 13px; 
+            font-weight: 600; 
+        } 
+
+        /* BOTTOM NAVIGATION BAR */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 100%; 
+            max-width: 430px; 
+            background: rgba(15, 16, 21, 0.85); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass-border); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 12px 0 16px; 
+            z-index: 1000; 
+            border-top-left-radius: 28px; 
+            border-top-right-radius: 28px; 
+            box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.8); 
+        }
+        .bottom-nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            color: rgba(255, 255, 255, 0.45); 
+            text-decoration: none; 
+            font-size: 11px; 
+            font-weight: 700; 
+            width: 20%; 
+            position: relative; 
+        }
+        .bottom-nav-item i { 
+            font-size: 19px; 
+            margin-bottom: 5px; 
+        }
+        .bottom-nav-item:hover, .bottom-nav-item.active { 
+            color: var(--accent-blue); 
+        }
+        .bottom-nav-item.active i { 
+            transform: translateY(-4px); 
+            color: var(--accent-blue); 
+            text-shadow: 0 0 10px rgba(0,229,255,0.4); 
+        }
+        .bottom-nav-item.active::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: -6px; 
+            width: 5px; 
+            height: 5px; 
+            background: var(--accent-blue); 
+            border-radius: 50%; 
+            box-shadow: 0 0 8px var(--accent-blue); 
+        }
+
+        /* MODAL WELCOME */
+        #welcomeModal { 
+            transition: opacity 0.4s ease, visibility 0.4s ease; 
+        }
+        .modal-content { 
+            background: linear-gradient(135deg, #161925 0%, #0b0c10 100%); 
+            padding: 30px 25px; 
+            border-radius: 28px; 
+            text-align: center; 
+            max-width: 320px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+        }
+    </style>
+</head>
+<body> 
+
+<!-- نافذة الترحيب -->
+<div id="welcomeModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div class="modal-content">
+        <div style="width: 70px; height: 70px; background: rgba(0,136,204,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+            <i class="fa-brands fa-telegram" style="font-size:40px; color:#0088cc;"></i>
         </div>
-
-        <div class="center-control">
-          <button class="round-btn small" id="rewindBtn"><i data-feather="rotate-ccw"></i></button>
-          <button class="round-btn big" id="playPauseBtn"><i data-feather="pause"></i></button>
-          <button class="round-btn small" id="forwardBtn"><i data-feather="rotate-cw"></i></button>
+        <h2 style="color:white; margin:0 0 10px; font-weight: 900; font-size: 22px;">مرحباً بك في Beryan TV</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:25px; line-height: 1.5;">انضم لقناتنا على تليجرام للحصول على آخر التحديثات والمباريات المباشرة أولاً بأول.</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="https://t.me/+yIYi89Ykob05ZTk8" target="_blank" style="background:#0088cc; color:white; text-decoration:none; padding:13px; border-radius:14px; font-weight:bold; box-shadow: 0 4px 15px rgba(0,136,204,0.3);">متابعة على تليجرام</a>
+            <button onclick="closeModal()" style="background:transparent; border:none; color:#666; cursor:pointer; padding:10px; font-weight: 700; font-size: 13px;">إغلاق</button>
         </div>
+    </div>
+</div>
 
-        <div class="player-bottom">
-          <div class="progress" id="progress">
-            <div class="progress-played" id="progressPlayed"></div>
-          </div>
-          <div class="bottom-row">
-            <div class="time-label" id="playerTime">LIVE</div>
-            <div class="icon-row">
-              <button class="pbtn" id="muteBtn"><i data-feather="volume-2"></i></button>
-              <button class="pbtn" id="speedBtn"><span class="speed-text">1x</span></button>
-              <button class="pbtn" id="qualityBtn"><i data-feather="settings"></i></button>
-              <button class="pbtn" id="audioBtn"><i data-feather="mic"></i></button>
-              <button class="pbtn" id="fullscreenBtn"><i data-feather="maximize"></i></button>
+<div class="app-container">
+    <!-- HEADER -->
+    <div class="header-icons"> 
+        <a href="#"> <i class="fa-solid fa-bars-staggered"></i> </a> 
+        <div class="top-logo"> BERYAN TV </div> 
+        <a href="#"> <i class="fa-solid fa-bell"></i> </a> 
+    </div> 
+
+    <!-- HERO SECTION WITH SLIDER -->
+    <div class="hero-section"> 
+        <div class="players-bg"></div> 
+        <div class="hero-overlay"></div> 
+        <div class="matches-container"> 
+            <div class="matches-title"> 
+                <i class="fa-solid fa-circle" style="color: red; font-size: 8px; animation: pulse 1s infinite;"></i> 
+                <span id="sliderTitle">بث مباشر / مباريات اليوم</span> 
+            </div> 
+            <div class="matches-slider-wrapper" id="sliderWrapper">
+                <div class="matches-slider" id="matchesSlider"> 
+                    <div class="loading-text">جاري تحميل المباريات...</div> 
+                </div> 
             </div>
-          </div>
-        </div>
+        </div> 
+    </div> 
 
-        <div class="control-menu" id="qualityMenu"></div>
-        <div class="control-menu" id="audioMenu"></div>
-        <div class="control-menu" id="speedMenu"></div>
-      </div>
+    <!-- CATEGORIES -->
+    <div class="hero-categories"> 
+        <a href="go:TVA" class="cat-box"> <i class="fa-solid fa-tv"></i> <span>القنوات</span> </a> 
+        <a href="go:iptv" class="cat-box"> <i class="fa-solid fa-satellite-dish"></i> <span>IPTV</span> </a> 
+        <a href="go:transfers" class="cat-box"> <i class="fa-solid fa-right-left"></i> <span>الانتقالات</span> </a> 
+        <a href="go:stats" class="cat-box"> <i class="fa-solid fa-chart-line"></i> <span>الإحصائيات</span> </a> 
+        <a href="go:news" class="cat-box"> <i class="fa-solid fa-newspaper"></i> <span>الأخبار</span> </a> 
     </div>
 
-    <div class="servers-container" id="serverStrip"></div>
-  </div>
+    <!-- LEAGUES SECTION -->
+    <div class="leagues-container"> 
+        <div class="section-header"> <span>أقوى الدوريات العالمية وترتيبها</span> <i class="fa-solid fa-chevron-left"></i> </div> 
+        <div class="leagues-list"> 
+            <a href="go:league1" class="league-item"> <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="Premier League"> <span>Premier League</span> </a> 
+            <a href="go:league2" class="league-item"> <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/LaLiga_logo_2023.svg" alt="La Liga"> <span>La Liga</span> </a> 
+            <a href="go:league3" class="league-item"> <img src="https://upload.wikimedia.org/wikipedia/fr/d/d9/Logo_Ligue_1_2024.svg" alt="Ligue 1"> <span>Ligue 1</span> </a> 
+            <a href="go:FIFA" class="league-item"> <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/5/5a/2026_FIFA_World_Cup.svg/langfr-250px-2026_FIFA_World_Cup.svg.png" alt="كأس العالم"> <span>كأس العالم</span> </a> 
+        </div> 
+    </div> 
+
+    <!-- SOCIAL MEDIA -->
+    <div class="social-bar"> 
+        <span>تابعنا</span> 
+        <div class="social-icons"> 
+            <a href="#"> <i class="fa-brands fa-facebook-f"></i> </a>
+            <a href="#"> <i class="fa-brands fa-x-twitter"></i> </a> 
+            <a href="#"> <i class="fa-brands fa-instagram"></i> </a> 
+        </div> 
+    </div> 
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-nav">
+    <a href="go:A1-" class="bottom-nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>الرئيسية</span>
+    </a>
+    <a href="go:evnt1" class="bottom-nav-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>المباريات</span>
+    </a>
+    <a href="/" class="bottom-nav-item">
+        <i class="fa-solid fa-list-ol"></i>
+        <span>الترتيب</span>
+    </a>
+    <a href="/" class="bottom-nav-item">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>إحصائيات</span>
+    </a>
+    <a href="go:news" class="bottom-nav-item">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>أخبار</span>
+    </a>
+</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-  feather.replace();
+    /* API */ 
+    const API_URL = "https://ali.albasritv1.workers.dev/"; 
+    const slider = document.getElementById( "matchesSlider" ); 
+    const sliderWrapper = document.getElementById( "sliderWrapper" );
 
-  // رابط الـ Worker الجديد والخاص بك من الكود المدخل
-  const WORKER_BASE = "https://api.albasritv1.workers.dev/";
+    /* IMAGE CLEANER */ 
+    function cleanImage(url){ 
+        if(!url){ return "https://cdn-icons-png.flaticon.com/512/5323/5323869.png"; } 
+        if(url.startsWith("//")){ return "https:" + url; } 
+        return url; 
+    } 
 
-  // تنظيف ومعالجة الروابط لصور الشعارات
-  function getCleanImg(url) {
-    if (!url) return "https://via.placeholder.com/55x55/151c2c/ffffff?text=TEAM";
-    let u = url.trim();
-    if (u.startsWith("http://") || u.startsWith("https://")) return u;
-    if (u.startsWith("//")) return "https:" + u;
-    return "https://koooracity.com/" + u.replace(/^\//, '');
-  }
+    /* TIME FORMATTER */ 
+    function formatTime(time){ 
+        if(!time) return "--:--"; 
+        const match = time.match(/(\d{1,2}):(\d{2})/); 
+        if(!match) return time; 
+        let hour = parseInt(match[1]); 
+        const minute = match[2]; 
+        const ampm = hour >= 12 ? "م" : "ص"; 
+        hour = hour % 12 || 12; 
+        return `${hour}:${minute} ${ampm}`; 
+    } 
 
-  // Firebase Config الأصلي الثابت
-  const firebaseConfig = {
-    apiKey: "AIzaSyAGhmOqXWxmr2ULOzNMMDuLlxCeTmUNpis",
-    databaseURL: "https://frsin-araq-default-rtdb.firebaseio.com",
-    projectId: "frsin-araq",
-    storageBucket: "frsin-araq.firebasestorage.app",
-    messagingSenderId: "813355696991",
-    appId: "1:813355696991:android:4a58ec98591210bf77acea"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    /* CREATE CARD DOM */ 
+    function createMatchCard(match, index){ 
+        const card = document.createElement("div"); 
+        card.className = "match-card"; 
+        const team1 = match.team1?.name || "الفريق الأول"; 
+        const team2 = match.team2?.name || "الفريق الثاني"; 
+        const logo1 = cleanImage(match.team1?.logo); 
+        const logo2 = cleanImage(match.team2?.logo); 
+        const league = match.league || "مباريات اليوم"; 
+        const channel = match.channel || "بدون بث"; 
+        let status = "لم تبدأ"; 
+        let statusClass = "status-upcoming"; 
+        let centerValue = formatTime(match.time); 
+        
+        if(match.priority === 1){ 
+            status = "مباشر"; 
+            statusClass = "status-live"; 
+            centerValue = `${match.team1.goals || 0} - ${match.team2.goals || 0}`; 
+        } else if(match.priority === 3){ 
+            status = "انتهت"; 
+            centerValue = `${match.team1.goals || 0} - ${match.team2.goals || 0}`; 
+        } 
+        
+        card.innerHTML = ` 
+            <div class="match-header"> ${league} </div> 
+            <div class="match-body"> 
+                <div class="team"> <img loading="lazy" src="${logo1}" alt="${team1}"> <span class="team-name"> ${team1} </span> </div> 
+                <div class="match-center"> 
+                    <div class="match-time"> ${centerValue} </div> 
+                    <div class="match-status ${statusClass}"> ${status} </div> 
+                    <div class="channel-name"><i class="fa-solid fa-satellite-dish" style="font-size:8px;"></i> ${channel} </div> 
+                </div> 
+                <div class="team"> <img loading="lazy" src="${logo2}" alt="${team2}"> <span class="team-name"> ${team2} </span> </div> 
+            </div> 
+        `; 
+        card.onclick = () => { window.location.href = `go:${index + 1001}`; }; 
+        return card; 
+    } 
 
-  // UI Elements
-  const els = {
-    homeView: document.getElementById('homeView'),
-    matchView: document.getElementById('matchView'),
-    matchesList: document.getElementById('matchesList'),
-    matchCardContainer: document.getElementById('matchHeaderCardContainer'),
-    headerTitle: document.getElementById('headerTitle'),
-    backBtn: document.getElementById('backBtn'),
-    themeBtn: document.getElementById('themeBtn'),
-    leagueBanner: document.getElementById('leagueBanner'),
-    
-    video: document.getElementById('video'),
-    playerRoot: document.getElementById('playerRoot'),
-    playerWrapper: document.getElementById('playerWrapper'),
-    serverStrip: document.getElementById('serverStrip'),
-    loading: document.getElementById('loading'),
-    buffer: document.getElementById('buffer'),
-    errorOverlay: document.getElementById('errorOverlay'),
-    errorTitle: document.getElementById('errorTitle'),
-    errorMsg: document.getElementById('errorMsg'),
-    progress: document.getElementById('progress'),
-    progressPlayed: document.getElementById('progressPlayed'),
-    playerTime: document.getElementById('playerTime'),
-    toast: document.getElementById('toast'),
-    menus: {
-      quality: document.getElementById('qualityMenu'),
-      audio: document.getElementById('audioMenu'),
-      speed: document.getElementById('speedMenu')
+    /* FETCH LOGIC */ 
+    async function fetchMatches(){ 
+        try { 
+            const response = await fetch(API_URL); 
+            const result = await response.json(); 
+            slider.innerHTML = ""; 
+            if(!result.success){ throw new Error(); } 
+            const matches = result.data || []; 
+            if(matches.length === 0){ 
+                slider.innerHTML = `<div class="loading-text"> لا توجد مباريات اليوم </div>`; 
+                return; 
+            } 
+             
+            matches.forEach((match, index) => { 
+                slider.appendChild(createMatchCard(match, index)); 
+            }); 
+
+            if(matches.length > 0) {
+                const cloneSlider = slider.cloneNode(true);
+                cloneSlider.removeAttribute('id');
+                sliderWrapper.appendChild(cloneSlider);
+            }
+
+        } catch(error){ 
+            slider.innerHTML = `<div class="loading-text"> فشل تحميل المباريات </div>`; 
+        } 
+    } 
+
+    /* INITIALIZATION */
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchMatches();
+        if (!localStorage.getItem('visited')) {
+            document.getElementById('welcomeModal').style.display = 'flex';
+        }
+    });
+
+    function closeModal() {
+        document.getElementById('welcomeModal').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('welcomeModal').style.display = 'none';
+        }, 300);
+        localStorage.setItem('visited', 'true');
     }
-  };
-
-  let shakaPlayer = null, currentServers = [], currentIndex = 0;
-  let controlsTimer = null, suppressVideoError = false, currentSpeed = 1;
-
-  function toastMsg(msg){
-    els.toast.textContent = msg; els.toast.classList.add("show");
-    setTimeout(() => els.toast.classList.remove("show"), 2500);
-  }
-
-  const getHomeName = m => m.home || m.home_name || m.homeName || "المستضيف";
-  const getAwayName = m => m.away || m.away_name || m.awayName || "الضيف";
-  const getCommentator = m => m.commentator || m.commenter || m.channel || "معلق المباراة";
-
-  function toEng(str){ return String(str||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴٥٦۷۸۹".indexOf(d)); }
-  
-  function format12Hour(time){
-    if(!time) return "00:00";
-    const m = toEng(time).trim().match(/(\d{1,2}):(\d{2})/);
-    if(!m) return time;
-    let h = parseInt(m[1], 10), min = m[2];
-    return (h % 12 || 12) + ":" + min;
-  }
-
-  function getStatus(m){
-    const s = Number(m.status ?? m.match_status ?? 0);
-    const txt = String(m.statusText || m.status_text || "");
-    const matchStart = (m.date && m.time) ? new Date(m.date + "T" + toEng(m.time)) : null;
-
-    if(txt.includes("انتهت") || s === 4 || (matchStart && Date.now() >= matchStart.getTime() + (130*60*1000))) return {text:"انتهت", cls:"end", isLive: false};
-    if(txt.includes("جارية") || txt.includes("مباشر") || [1,2,3].includes(s) || (matchStart && Date.now() >= matchStart.getTime())) return {text:"مباشر", cls:"live", isLive: true};
-    return {text:"لم تبدأ", cls:"soon", isLive: false};
-  }
-
-  function getScore(m){
-    const h = String(m.homeScore ?? m.home_scores ?? "").trim(), a = String(m.awayScore ?? m.away_scores ?? "").trim();
-    return (h==="" || h==="-") ? "0-0" : `${h}-${a}`;
-  }
-
-  function normalizeServers(m){
-    let s = Array.isArray(m.servers)?m.servers:Array.isArray(m.qualities)?m.qualities:(typeof m.servers==="object"&&m.servers!==null)?Object.values(m.servers):[];
-    return s.filter(x => x && x.url).map(x => ({ label: x.label||x.name||"سيرفر", url: x.url||"", ua: x.userAgent||"", ref: x.referer||"", key: x.drmKey||x.clearKey||"" }));
-  }
-
-  // بناء هيكل كرت المباراة مع دمج دالة getCleanImg لتطهير روابط الصور
-  function buildCardHTML(m, isClickable = true){
-    const status = getStatus(m);
-    const timeOrScore = status.isLive || status.cls === 'end' ? getScore(m) : format12Hour(m.time || m.match_time);
-
-    return `
-      <div class="match-card ${isClickable ? 'clickable' : ''}">
-        <div class="match-teams">
-          
-          <div class="match-time-container">
-            ${timeOrScore}
-          </div>
-
-          <div class="match-teams-center">
-            <span class="team-name-display">${getHomeName(m)}</span>
-            <div class="team-logo-wrapper">
-              <img src="${getCleanImg(m.homeLogo || m.home_logo)}" loading="lazy">
-            </div>
-            
-            <span class="match-vs-divider">-</span>
-            
-            <div class="team-logo-wrapper">
-              <img src="${getCleanImg(m.awayLogo || m.away_logo)}" loading="lazy">
-            </div>
-            <span class="team-name-display">${getAwayName(m)}</span>
-          </div>
-
-          <div class="match-meta-left">
-            <span class="commentator-name">${getCommentator(m)}</span>
-            <div class="status-indicator-badge ${status.cls}">
-              ${status.text}
-            </div>
-          </div>
-
-        </div>
-      </div>
-    `;
-  }
-
-  db.ref("matches").on("value", snap => {
-    const data = snap.val() || {};
-    const list = Object.values(data).filter(m => m && (m.published === true || String(m.published) === "true"));
-    els.matchesList.innerHTML = "";
-    if(!list.length) return els.matchesList.innerHTML = '<div class="empty">لا توجد مباريات حالياً</div>';
-    
-    list.sort((a, b) => {
-      const statusOrder = { "live": 1, "soon": 2, "end": 3 };
-      const valA = statusOrder[getStatus(a).cls] || 4;
-      const valB = statusOrder[getStatus(b).cls] || 4;
-      return valA - valB;
-    }).forEach(m => {
-      const div = document.createElement("div");
-      div.innerHTML = buildCardHTML(m, true);
-      div.onclick = () => openMatchPage(m);
-      els.matchesList.appendChild(div);
-    });
-    feather.replace();
-  });
-
-  function openMatchPage(m){
-    currentServers = normalizeServers(m);
-    currentIndex = 0;
-    
-    els.headerTitle.textContent = `${getHomeName(m)} VS ${getAwayName(m)}`;
-    els.headerTitle.style.direction = "rtl";
-    els.matchCardContainer.innerHTML = buildCardHTML(m, false);
-    
-    els.homeView.classList.remove('active');
-    els.matchView.classList.add('active');
-    els.leagueBanner.style.display = "none";
-    
-    els.backBtn.style.visibility = "visible";
-    feather.replace();
-
-    buildServerButtons();
-    if(currentServers.length > 0) playServer(0);
-    else showError("لا يوجد بث", "لم يتم إضافة روابط بث لهذه المباراة بعد.");
-  }
-
-  function goHome(){
-    destroyPlayer();
-    els.matchView.classList.remove('active');
-    els.homeView.classList.add('active');
-    els.leagueBanner.style.display = "flex";
-    els.headerTitle.textContent = "المباريات المباشرة";
-    els.backBtn.style.visibility = "hidden";
-  }
-  els.backBtn.onclick = goHome;
-
-  function toggleTheme(){
-    const isL = document.body.classList.toggle("light");
-    localStorage.setItem("bsr_theme", isL ? "light" : "dark");
-    els.themeBtn.innerHTML = `<i data-feather="${isL ? 'sun' : 'moon'}"></i>`; feather.replace();
-  }
-  if(localStorage.getItem("bsr_theme") === "light") toggleTheme();
-  els.themeBtn.onclick = toggleTheme;
-
-  function showPlayerControls(){
-    els.playerRoot.classList.remove("player-controls-hidden");
-    clearTimeout(controlsTimer);
-    controlsTimer = setTimeout(() => {
-      if(!Object.values(els.menus).some(m => m.classList.contains("show"))) els.playerRoot.classList.add("player-controls-hidden");
-    }, 3500);
-  }
-
-  els.playerRoot.addEventListener("click", e => {
-    if(!e.target.closest(".pbtn, .control-menu")) closeMenus();
-    if(e.target.closest("button, #progress, .control-menu")) { showPlayerControls(); return; }
-    els.playerRoot.classList.contains("player-controls-hidden") ? showPlayerControls() : (clearTimeout(controlsTimer), els.playerRoot.classList.add("player-controls-hidden"), closeMenus());
-  });
-
-  function closeMenus(){ Object.values(els.menus).forEach(m => m.classList.remove("show")); }
-  function toggleMenu(menu){ const isOpen = menu.classList.contains("show"); closeMenus(); if(!isOpen) menu.classList.add("show"); showPlayerControls(); }
-
-  function buildServerButtons(){
-    els.serverStrip.innerHTML = "";
-    if(!currentServers.length) return els.serverStrip.innerHTML = '<span style="color:var(--text-muted); margin: auto;">لا توجد سيرفرات</span>';
-    currentServers.forEach((s, i) => {
-      const b = document.createElement("button");
-      b.className = "server-btn" + (i === currentIndex ? " active" : "");
-      b.innerHTML = `<i data-feather="monitor" style="width:16px;height:16px;"></i> ${s.label}`;
-      b.onclick = () => playServer(i, false);
-      els.serverStrip.appendChild(b);
-    });
-    feather.replace();
-  }
-
-  function showError(title, msg){
-    els.loading.style.display = "none"; els.buffer.style.display = "none";
-    els.errorTitle.textContent = title; els.errorMsg.textContent = msg;
-    els.errorOverlay.style.display = "flex";
-  }
-
-  async function destroyPlayer(){
-    if(shakaPlayer){ try { await shakaPlayer.destroy(); shakaPlayer = null; } catch(e){} }
-    els.video.pause(); els.video.removeAttribute("src"); els.video.load();
-  }
-
-  async function playServer(i, useWorker = false){
-    const src = currentServers[i]; if(!src) return;
-    currentIndex = i; buildServerButtons(); suppressVideoError = true; await destroyPlayer();
-    setTimeout(() => suppressVideoError = false, 1000);
-    els.errorOverlay.style.display = "none"; els.loading.style.display = "block";
-
-    let finalUrl = src.url;
-    // استخدام الرابط الجديد للـ Worker الخاص بك عند تشفير او حماية التدفقات
-    if(useWorker || src.ua || src.ref) {
-      const p = new URLSearchParams({ url: src.url, _: Date.now() });
-      if(src.ua) p.set("ua", src.ua); if(src.ref) p.set("ref", src.ref);
-      if(src.url.includes(".m3u8")) p.set("type", "hls");
-      finalUrl = WORKER_BASE + "?" + p.toString();
-    }
-
-    try{
-      shaka.polyfill.installAll(); shakaPlayer = new shaka.Player(els.video);
-      shakaPlayer.configure({ streaming: { bufferingGoal:30, rebufferingGoal:2 } });
-      if(src.key) { const ck = src.key.split(":"); if(ck.length===2) shakaPlayer.configure({ drm: { clearKeys: { [ck[0]]: ck[1] } } }); }
-
-      shakaPlayer.addEventListener("error", async () => { if(!useWorker) playServer(currentIndex, true); });
-      await shakaPlayer.load(finalUrl); await els.video.play().catch(()=>{});
-      
-      els.loading.style.display = "none"; els.video.playbackRate = currentSpeed;
-      updatePlayIcon(); showPlayerControls(); buildMenus();
-    } catch(e) {
-      els.loading.style.display = "none";
-      if(!useWorker) playServer(currentIndex, true); else showError("فشل البث", "تعذر تشغيل هذا السيرفر.");
-    }
-  }
-
-  function buildMenus(){
-    els.menus.quality.innerHTML = `<button class="menu-item active" onclick="shakaPlayer.configure({abr:{enabled:true}});toastMsg('تلقائي')">تلقائي</button>`;
-    if(shakaPlayer) shakaPlayer.getVariantTracks().filter(t=>t.height).sort((a,b)=>b.height-a.height).forEach(t => {
-      if(!els.menus.quality.innerHTML.includes(t.height+'p')) els.menus.quality.innerHTML += `<button class="menu-item" onclick="shakaPlayer.configure({abr:{enabled:false}});shakaPlayer.selectVariantTrack(${JSON.stringify(t)},true);toastMsg('${t.height}p')">${t.height}p</button>`;
-    });
-    els.menus.audio.innerHTML = "";
-    if(shakaPlayer) [...new Set(shakaPlayer.getVariantTracks().map(t=>t.language||"und"))].forEach(l => {
-      els.menus.audio.innerHTML += `<button class="menu-item" onclick="shakaPlayer.configure({preferredAudioLanguage:'${l}'});toastMsg('صوت: ${l}')">صوت: ${l.toUpperCase()}</button>`;
-    });
-    if(els.menus.audio.innerHTML==="") els.menus.audio.innerHTML = `<button class="menu-item active">الافتراضي</button>`;
-    els.menus.speed.innerHTML = "";
-    [0.5,1,1.5,2].forEach(s => els.menus.speed.innerHTML += `<button class="menu-item" onclick="document.getElementById('video').playbackRate=${s};document.querySelector('.speed-text').innerText='${s}x';toastMsg('السرعة ${s}x')">${s}x</button>`);
-  }
-
-  els.video.addEventListener("timeupdate", () => {
-    const d = els.video.duration, c = els.video.currentTime||0;
-    if(d && isFinite(d)){ els.progressPlayed.style.width = ((c/d)*100)+"%"; els.playerTime.textContent = new Date(c*1000).toISOString().substr(14,5); } 
-    else { els.progressPlayed.style.width = "100%"; els.playerTime.textContent = "LIVE 🔴"; }
-  });
-  els.video.addEventListener("waiting", () => els.buffer.style.display = "block");
-  els.video.addEventListener("playing", () => els.buffer.style.display = "none");
-  els.progress.onclick = e => { const d = els.video.duration; if(d&&isFinite(d)) els.video.currentTime = ((e.clientX - els.progress.getBoundingClientRect().left)/els.progress.offsetWidth) * d; };
-
-  const updatePlayIcon = () => { document.getElementById("playPauseBtn").innerHTML = `<i data-feather="${els.video.paused?'play':'pause'}"></i>`; feather.replace(); };
-  document.getElementById("playPauseBtn").onclick = () => { els.video.paused ? els.video.play() : els.video.pause(); updatePlayIcon(); };
-  els.video.addEventListener("play", updatePlayIcon); els.video.addEventListener("pause", updatePlayIcon);
-
-  document.getElementById("rewindBtn").onclick = () => { if(isFinite(els.video.duration)) els.video.currentTime -= 10; };
-  document.getElementById("forwardBtn").onclick = () => { if(isFinite(els.video.duration)) els.video.currentTime += 10; };
-  document.getElementById("muteBtn").onclick = () => { els.video.muted = !els.video.muted; document.getElementById("muteBtn").innerHTML = `<i data-feather="${els.video.muted?'volume-x':'volume-2'}"></i>`; feather.replace(); };
-  
-  document.getElementById("fullscreenBtn").onclick = async () => {
-    const p = els.playerWrapper;
-    if(document.fullscreenElement) document.exitFullscreen();
-    else if(p.requestFullscreen) { await p.requestFullscreen(); screen.orientation?.lock("landscape").catch(()=>{}); }
-    else if(p.webkitRequestFullscreen) p.webkitRequestFullscreen();
-  };
-
-  document.getElementById("qualityBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.quality); };
-  document.getElementById("audioBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.audio); };
-  document.getElementById("speedBtn").onclick = e => { e.stopPropagation(); toggleMenu(els.menus.speed); };
-  document.getElementById("retryBtn").onclick = () => playServer(currentIndex, true);
-});
 </script>
+
 </body>
 </html>
